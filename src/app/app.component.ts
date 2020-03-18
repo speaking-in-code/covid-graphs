@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import DailyStats from '../assets/daily.json';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +9,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'covid-graphs';
+
+  stats = DailyStats;
 }
