@@ -1,6 +1,9 @@
 # CovidGraphs
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.6.
+Useful tutorials:
+https://medium.com/@swathisprasad/building-data-visualization-with-angular-and-ngx-charts-375942d49fd6
+
+https://swimlane.gitbook.io/ngx-charts/
 
 ## Development server
 

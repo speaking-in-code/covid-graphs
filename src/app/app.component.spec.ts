@@ -22,10 +22,12 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('covid-graphs');
   });
 
+  /*
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelector('.content span').textContent).toContain('covid-graphs app is running!');
   });
+  */
 });
