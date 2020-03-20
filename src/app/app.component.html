@@ -1,11 +1,6 @@
 <h2>{{title}}</h2>
 
 <div class="row">
-  <h4>
-    Vertical Bar Chart
-  </h4>
-</div>
-<div class="row">
   <plotly-plot [data]="infections.data" [layout]="infections.layout"></plotly-plot>
 </div>
 
@@ -13,12 +8,10 @@
   <plotly-plot [data]="growth.data" [layout]="growth.layout"></plotly-plot>
 </div>
 
-<!--
-Every state:
-<div *ngFor="let stat of stats">
-  Date: {{stat["date"]}}
-  State: {{stat["state"]}}
-  Positive: {{stat["positive"]}}
-  Total: {{stat["total"]}}
+<div class="row">
+  <plotly-plot [data]="infection_rate.data" [layout]="infection_rate.layout"></plotly-plot>
 </div>
--->
+
+<div class="row">
+  <plotly-plot [data]="tests_per_case.data" [layout]="tests_per_case.layout"></plotly-plot>
+</div>
