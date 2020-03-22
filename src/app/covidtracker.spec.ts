@@ -1,15 +1,13 @@
-import { async } from '@angular/core/testing';
 import { CovidTracker } from './covidtracker';
-import DailyStats from '../assets/daily.json';
 
 describe('CovidTracker', () => {
-  let tracker = CovidTracker.fromDailyApiData(DailyStats);
+  let tracker = new CovidTracker();
   it(`should parse without errors`, () => {
     expect(tracker).toBeTruthy('Failed to parse API input');
   });
 
   it('should have right CA data', () => {
-    let ca = tracker.states.get('CA');
+    let ca = tracker.getStats('CA')
     expect(ca.dates[0]).toEqual(new Date(2020, 2, 4));
     expect(ca.dates[1]).toEqual(new Date(2020, 2, 5));
     expect(ca.positives[0]).toEqual(53);

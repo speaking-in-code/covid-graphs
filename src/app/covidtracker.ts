@@ -195,7 +195,7 @@ export class StateStats {
   }
 
   private debugLog(str: string) {
-    if (this.metadata.code === 'NY') {
+    if (this.metadata.code === 'DISABLED') {
       console.log(str);
     }
   }
@@ -232,7 +232,6 @@ export class CovidTracker {
       if (b === undefined) {
         const metadata = this.states.stateMap.get(day.state_code);
         if (metadata === undefined) {
-          console.log(`CovidTracker: unknown state code ${day.state_code}`);
           continue;
         }
         b = new StateStatsBuilder(metadata);
