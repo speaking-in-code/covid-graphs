@@ -18,7 +18,7 @@ interface Selection {
   styleUrls: ['./graphs.component.css']
 })
 export class GraphsComponent {
-  tracker = new CovidTracker();
+  tracker = CovidTracker.create();
   data = new GraphsData(this.tracker);
 
   states_available: Selection[] = [];

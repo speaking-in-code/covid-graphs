@@ -1,12 +1,12 @@
 // Parses data from covidtracker.com
 
 import TrackerJson from '../assets/daily.json';
-
 // States data from Table 2. Cumulative Estimates of Resident Population Change for the United States,
 // Regions, States, and Puerto Rico and Region and State Rankings: April 1, 2010 to July 1, 2019 (NST-EST2019-02)
 // Source: U.S. Census Bureau, Population Division
 // Release Date: December 2019
 import StatesJson from '../assets/states.json';
+import {Arrays} from './arrays';
 
 /**
  * Metadata about a state from states.json.
@@ -130,8 +130,8 @@ export class StateStats {
 
   private static ensureNonDecreasing(array: number[]) {
     for (let i = 1; i < array.length; ++i) {
-      if (array[i-1] > array[i]) {
-        array[i] = array[i-1];
+      if (array[i - 1] > array[i]) {
+        array[i] = array[i - 1];
       }
     }
   }
@@ -139,17 +139,17 @@ export class StateStats {
   // Smooth values in the array over the previous prev days.
   private static smooth(a: number[], prev: number): number[] {
     let s = [];
-    for (let i=0; i < a.length; ++i) {
+    for (let i = 0; i < a.length; ++i) {
       let sum = 0;
       let days = 0;
-      for (let j=i-prev; j <= i; ++j) {
+      for (let j = i - prev; j <= i; ++j) {
         if (j < 0) {
           continue;
         }
         ++days;
         sum += a[j];
       }
-      s.push(sum/days);
+      s.push(sum / days);
     }
     return s;
   }
@@ -157,13 +157,13 @@ export class StateStats {
   private initInfectionRate(builder: StateStatsBuilder) {
     for (const positive of this.positives) {
       this.positives_per_mil.push(
-         positive/(this.metadata.population/1000000));
+        positive / (this.metadata.population / 1000000));
     }
   }
 
   private initGrowthRate(builder: StateStatsBuilder) {
     this.smoothed_growth_rate.push(NaN, NaN);
-    for (let i = 2; i <= this.positives.length; ++i) {
+    for (let i = 2; i < this.positives.length; ++i) {
       let orig = this.positives[i - 2];
       let now = this.positives[i];
       let increase = NaN;
@@ -202,7 +202,6 @@ export class StateStats {
   }
 }
 
-
 /**
  * Metadata about all states.
  */
@@ -218,22 +217,53 @@ export class States {
   }
 }
 
+// Optional interface to use for creating CovidTracker.
+export interface CovidTrackerRawData {
+  trackerJson?: any;
+  debugTopK?: boolean;
+};
+
 /**
  * CovidTracker has all of our statistical data.
  */
 export class CovidTracker {
-  readonly states = new States();
-  private stats = new Map<string, StateStats>();
-  readonly fastest_growth: Array<string>;
+  /** Create a tracker. Default is to use real raw data. */
+  public static create(rawData: CovidTrackerRawData = {trackerJson: TrackerJson, debugTopK: false}) {
+    return new CovidTracker(rawData);
+  }
 
-  constructor() {
+  /** All states */
+  readonly states = new States();
+
+  /** States with fastest growth rates, top 5. */
+  readonly fastest_growth: string[];
+
+  /** States with biggest outbreaks, top 5. */
+  readonly largest_outbreaks: string[];
+
+  /** States with largest infection rates, top 5. */
+  readonly largest_infection_rates: string[];
+
+  getStats(postal_code: string): StateStats {
+    return this.stats.get(postal_code);
+  }
+
+  private stats = new Map<string, StateStats>();
+  private debugTopK: boolean;
+  private static kSummarySize = 5;
+
+  /** Get stats for a state given the postal code */
+  private constructor(rawData: CovidTrackerRawData) {
+    this.debugTopK = rawData.debugTopK;
     let builders = new Map<string, StateStatsBuilder>();
-    for (const obj of TrackerJson) {
+    let unknownStates = new Set<string>();
+    for (const obj of rawData.trackerJson) {
       const day = new DailyStats(obj);
       let b = builders.get(day.state_code);
       if (b === undefined) {
         const metadata = this.states.stateMap.get(day.state_code);
         if (metadata === undefined) {
+          unknownStates.add(day.state_code);
           continue;
         }
         b = new StateStatsBuilder(metadata);
@@ -241,30 +271,61 @@ export class CovidTracker {
       }
       b.addDailyStats(day);
     }
+    if (unknownStates.size > 0) {
+      let warning = Array.from(unknownStates.keys()).sort().join(' ');
+      console.log(`CovidTracker: unknown states found: ${warning}`);
+    }
     builders.forEach((b, postal_code) => {
       this.stats.set(postal_code, b.build());
     });
-    this.fastest_growth = Array.from(this.stats.keys());
-    this.fastest_growth.sort((a, b) => {
-      let growth_a = this.lastElement(this.stats.get(a).smoothed_growth_rate);
-      let growth_b = this.lastElement(this.stats.get(a).smoothed_growth_rate);
-      if (growth_a === undefined || growth_b < growth_a) {
-        return 1;
-      } else if (growth_b === undefined || growth_a > growth_b) {
-        return growth_a;
+    this.fastest_growth = this.topK('fastest growth',
+      (state) => Arrays.last(state.positives) >= 100,
+      (state) => state.smoothed_growth_rate);
+    this.largest_infection_rates = this.topK('largest infection rates',
+      (state) => true,
+      (state) => state.positives_per_mil);
+    this.largest_outbreaks = this.topK('largest outbreaks',
+      (state) => true,
+      (state) => state.positives);
+  }
+
+  private static kDebugTopK = false;
+
+  /**
+   * Finds the top 5 states based on the metric array returned by the extraction function.
+   *
+   * @param label label to use for debug output.
+   * @param filterFn receives StateStats, returns true if the state is eligible for inclusion.
+   * @param extractFn receives StateStats, returns an array of values for the state.
+   */
+  private topK(label: string,
+               filterFn: (stateStats: StateStats) => boolean,
+               extractFn: (stateStats: StateStats) => number[]): string[] {
+    let top = [];
+    for (let code of this.stats.keys()) {
+      if (filterFn(this.stats.get(code))) {
+        top.push(code);
       }
-      return 0;
+    }
+    top.sort((a, b) => {
+      let state_a = this.stats.get(a);
+      let state_b = this.stats.get(b);
+      let val_a = Arrays.last(extractFn(state_a));
+      let val_b = Arrays.last(extractFn(state_b));
+      return Arrays.compareDescending(val_a, val_b);
     });
-    this.fastest_growth.length = 5;
-  }
-
-  private lastElement(a: number[]) {
-    if (a.length === 0) return undefined;
-    return a[a.length-1];
-  }
-
-  getStats(postal_code: string): StateStats {
-    return this.stats.get(postal_code);
+    if (top.length > CovidTracker.kSummarySize) {
+      top.length = CovidTracker.kSummarySize;
+    }
+    if (this.debugTopK) {
+      let debug = [];
+      for (let code of top) {
+        let state = this.stats.get(code);
+        let val = Arrays.last(extractFn(state));
+        debug.push(`${code}=${val}`);
+      }
+      console.log(`${label}: ${debug.join(' ')}`);
+    }
+    return top;
   }
 }
-
