@@ -1,19 +1,21 @@
 <ng-select [items]="states_available" bindLabel="name" placeholder="Select states"
            appendTo="body" multiple="true" [(ngModel)]="states_selected"
-           (change)="onStatesChange()"></ng-select>
+           (change)="onStatesSelectedChange()" ></ng-select>
+
+<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.fastest_growth }">Fastest Growing</a>
 
 <div class="row">
-  <plotly-plot [data]="infections.data" [layout]="infections.layout"></plotly-plot>
+  <plotly-plot [data]="data.infections.data" [layout]="data.infections.layout"></plotly-plot>
 </div>
 
 <div class="row">
-  <plotly-plot [data]="growth.data" [layout]="growth.layout"></plotly-plot>
+  <plotly-plot [data]="data.growth.data" [layout]="data.growth.layout"></plotly-plot>
 </div>
 
 <div class="row">
-  <plotly-plot [data]="infection_rate.data" [layout]="infection_rate.layout"></plotly-plot>
+  <plotly-plot [data]="data.infection_rate.data" [layout]="data.infection_rate.layout"></plotly-plot>
 </div>
 
 <div class="row">
-  <plotly-plot [data]="test_negative_rate.data" [layout]="test_negative_rate.layout"></plotly-plot>
+  <plotly-plot [data]="data.test_negative_rate.data" [layout]="data.test_negative_rate.layout"></plotly-plot>
 </div>

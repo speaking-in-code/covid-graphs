@@ -180,15 +180,16 @@ export class StateStats {
     let negative_rate = [];
     for (let i = 0; i < this.positives.length; ++i) {
       let new_positive = this.positives[i] - prev_positive;
-      prev_positive = new_positive
+      prev_positive = new_positive;
 
       let new_negative = this.negatives[i] - prev_negative;
       prev_negative = new_negative;
 
       this.debugLog(`new_pos=${new_positive} new_neg=${new_negative}`);
-      negative_rate.push(new_negative / (new_positive + new_negative));
+      // negative_rate.push(new_negative / (new_positive + new_negative));
+      negative_rate.push(new_negative / (new_positive));
     }
-    negative_rate = StateStats.smooth(negative_rate, 0);
+    negative_rate = StateStats.smooth(negative_rate, 2);
     for (let r of negative_rate) {
       this.test_negative_rate.push(r);
     }
@@ -223,6 +224,7 @@ export class States {
 export class CovidTracker {
   readonly states = new States();
   private stats = new Map<string, StateStats>();
+  readonly fastest_growth: Array<string>;
 
   constructor() {
     let builders = new Map<string, StateStatsBuilder>();
@@ -242,6 +244,23 @@ export class CovidTracker {
     builders.forEach((b, postal_code) => {
       this.stats.set(postal_code, b.build());
     });
+    this.fastest_growth = Array.from(this.stats.keys());
+    this.fastest_growth.sort((a, b) => {
+      let growth_a = this.lastElement(this.stats.get(a).smoothed_growth_rate);
+      let growth_b = this.lastElement(this.stats.get(a).smoothed_growth_rate);
+      if (growth_a === undefined || growth_b < growth_a) {
+        return 1;
+      } else if (growth_b === undefined || growth_a > growth_b) {
+        return growth_a;
+      }
+      return 0;
+    });
+    this.fastest_growth.length = 5;
+  }
+
+  private lastElement(a: number[]) {
+    if (a.length === 0) return undefined;
+    return a[a.length-1];
   }
 
   getStats(postal_code: string): StateStats {
