@@ -1,62 +1,167 @@
 // Parses data from covidtracker.com
 
-export class State {
-  // What state? (two-letter postal code)
-  readonly state: string;
+import TrackerJson from '../assets/daily.json';
+
+// States data from Table 2. Cumulative Estimates of Resident Population Change for the United States,
+// Regions, States, and Puerto Rico and Region and State Rankings: April 1, 2010 to July 1, 2019 (NST-EST2019-02)
+// Source: U.S. Census Bureau, Population Division
+// Release Date: December 2019
+import StatesJson from '../assets/states.json';
+
+/**
+ * Metadata about a state from states.json.
+ */
+export class StateMetadata {
+  readonly code: string;
+  readonly name: string;
+  readonly population: number;
+
+  constructor(obj: any) {
+    this.code = obj.code;
+    this.name = obj.name;
+    this.population = obj.population;
+  }
+}
+
+/**
+ * Parses daily stats objects from covidtracker JSON api
+ */
+export class DailyStats {
+  readonly date: Date;
+  readonly positive: number;
+  readonly negative: number;
+  readonly state_code: string;
+
+  constructor(obj: any) {
+    this.date = DailyStats.parseDate(obj.date);
+    this.positive = DailyStats.ensureNumber(obj.positive);
+    this.negative = DailyStats.ensureNumber(obj.negative);
+    this.state_code = obj.state;
+  }
+
+  private static ensureNumber(val) {
+    return (typeof (val) === 'number' ? val : 0);
+  }
+
+  private static parseDate(date: number) {
+    let format = /(\d{4})(\d{2})(\d{2})/;
+    const match = date.toString().match(format);
+    if (match.length !== 4) {
+      throw new Error('Unexpected date in data: ' + date);
+    }
+    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  }
+}
+
+/**
+ * Builder for StateStats.
+ *
+ * Usage:
+ *   let b = new StateStatsBuilder(stateMetadaa);
+ *   b.addDailyStats(day1);
+ *   b.addDailyStats(day2);
+ *   b.addDailyStats(day3);
+ *   let stats = b.build();
+ */
+export class StateStatsBuilder {
+  metadata: StateMetadata;
+  daily: Array<DailyStats> = [];
+
+  constructor(metadata: StateMetadata) {
+    this.metadata = metadata;
+  }
+
+  addDailyStats(stats: DailyStats) {
+    this.daily.push(stats);
+  }
+
+  build(): StateStats {
+    return new StateStats(this);
+  }
+}
+
+/**
+ * Stats for a given state.
+ */
+export class StateStats {
+  // What state?
+  readonly metadata: StateMetadata;
 
   // Dates for which we have data, parallel array with others below.
   readonly dates: Array<Date> = [];
 
   // Total positives in the state
   readonly positives: Array<number> = [];
+
+  // Total negatives in the state.
+  readonly negatives: Array<number> = [];
+
   // Positives per million people
   readonly positives_per_mil: Array<number> = [];
 
   // Daily growth rate, average over previous 2 days.
   readonly smoothed_growth_rate: Array<number> = [];
 
-  // How many new cases were confirmed on a given day?
-  readonly new_cases: Array<number> = [];
+  // What fraction of tests case back negative on a given day?
+  readonly test_negative_rate: Array<number> = [];
 
-  // How many new tests were performed on a given day?
-  readonly new_tests: Array<number> = [];
-
-  // How many tests were run for each new confirmed case?
-  readonly tests_per_case: Array<number> = [];
-
-  private options: StateOptions;
-  private pop: StatePopulation;
-
-  constructor(options: StateOptions, pop: StatePopulation) {
-    this.options = options;
-    this.state = options.state;
-    this.pop = pop;
-    this.initDays();
-    this.initPositives();
-    this.initGrowthRate();
-    this.initNewCasesAndTests();
+  constructor(builder: StateStatsBuilder) {
+    this.metadata = builder.metadata;
+    this.initDates(builder);
+    this.initInfectionRate(builder);
+    this.initGrowthRate(builder);
+    this.initTestNegativeRate();
   }
 
-  private initDays() {
-    this.options.daily.sort((a, b) => {
+  private initDates(builder: StateStatsBuilder) {
+    builder.daily.sort((a, b) => {
       if (a.date < b.date) return -1;
       if (a.date > b.date) return 1;
       return 0;
     });
-    for (const day of this.options.daily) {
+    for (const day of builder.daily) {
       this.dates.push(day.date);
-    }
-  }
-
-  private initPositives() {
-    for (const day of this.options.daily) {
       this.positives.push(day.positive);
-      this.positives_per_mil.push(
-        day.positive/(this.pop.population/1000000));
+      this.negatives.push(day.negative);
+    }
+    StateStats.ensureNonDecreasing(this.positives);
+    StateStats.ensureNonDecreasing(this.negatives);
+  }
+
+  private static ensureNonDecreasing(array: number[]) {
+    for (let i = 1; i < array.length; ++i) {
+      if (array[i-1] > array[i]) {
+        array[i] = array[i-1];
+      }
     }
   }
 
-  private initGrowthRate() {
+  // Smooth values in the array over the previous prev days.
+  private static smooth(a: number[], prev: number): number[] {
+    let s = [];
+    for (let i=0; i < a.length; ++i) {
+      let sum = 0;
+      let days = 0;
+      for (let j=i-prev; j <= i; ++j) {
+        if (j < 0) {
+          continue;
+        }
+        ++days;
+        sum += a[j];
+      }
+      s.push(sum/days);
+    }
+    return s;
+  }
+
+  private initInfectionRate(builder: StateStatsBuilder) {
+    for (const positive of this.positives) {
+      this.positives_per_mil.push(
+         positive/(this.metadata.population/1000000));
+    }
+  }
+
+  private initGrowthRate(builder: StateStatsBuilder) {
     this.smoothed_growth_rate.push(NaN, NaN);
     for (let i = 2; i <= this.positives.length; ++i) {
       let orig = this.positives[i - 2];
@@ -69,117 +174,79 @@ export class State {
     }
   }
 
-  private initNewCasesAndTests() {
-    let prev_positives = 0;
-    let prev_tests = 0;
-    for (const day of this.options.daily) {
-      let new_cases = day.positive - prev_positives;
-      this.new_cases.push(new_cases);
-      prev_positives = day.positive;
+  private initTestNegativeRate() {
+    let prev_positive = 0;
+    let prev_negative = 0;
+    let negative_rate = [];
+    for (let i = 0; i < this.positives.length; ++i) {
+      let new_positive = this.positives[i] - prev_positive;
+      prev_positive = new_positive
 
-      let new_tests = day.tests - prev_tests;
-      this.new_tests.push(new_tests);
-      prev_tests = day.tests;
+      let new_negative = this.negatives[i] - prev_negative;
+      prev_negative = new_negative;
 
-      this.tests_per_case.push(new_tests/new_cases);
+      this.debugLog(`new_pos=${new_positive} new_neg=${new_negative}`);
+      negative_rate.push(new_negative / (new_positive + new_negative));
+    }
+    negative_rate = StateStats.smooth(negative_rate, 0);
+    for (let r of negative_rate) {
+      this.test_negative_rate.push(r);
     }
   }
 
   private debugLog(str: string) {
-    if (this.state !== 'CA') return;
-    console.log(str);
+    if (this.metadata.code === 'NY') {
+      console.log(str);
+    }
   }
 }
 
-type DailyData = {
-  date: Date;
-  positive: number;
-  tests: number;
-}
 
-class StateOptions {
-  state: string;
-  daily: Array<DailyData> = [];
-}
-
-// States data from Table 2. Cumulative Estimates of Resident Population Change for the United States,
-// Regions, States, and Puerto Rico and Region and State Rankings: April 1, 2010 to July 1, 2019 (NST-EST2019-02)
-// Source: U.S. Census Bureau, Population Division
-// Release Date: December 2019
-import StatesJson from '../assets/states.json';
-
-class StatePopulation {
-  readonly name: string;
-  readonly code: string;
-  readonly population: number;
-
-  constructor(data) {
-    this.name = data.name;
-    this.code = data.code;
-    this.population = data.population;
-  }
-}
-
-class StatePopulations {
-  readonly states: Map<string, StatePopulation>;
+/**
+ * Metadata about all states.
+ */
+export class States {
+  /** Keys are postal codes, values are state metdata */
+  readonly stateMap = new Map<string, StateMetadata>();
 
   constructor() {
-    this.states = new Map<string, StatePopulation>();
     for (const data of StatesJson) {
-      const s = new StatePopulation(data);
-      this.states.set(s.code, s);
+      let metadata = new StateMetadata(data);
+      this.stateMap.set(metadata.code, metadata);
     }
   }
 }
 
+/**
+ * CovidTracker has all of our statistical data.
+ */
 export class CovidTracker {
-  static fromDailyApiData(daily: Array<any>): CovidTracker {
-    const populations = new StatePopulations();
-    let optionsMap = new Map<string, StateOptions>();
-    for (const obj of daily) {
-      const date = CovidTracker.parseDate(obj.date);
-      const state = obj.state;
-      const positive = obj.positive;
-      const tests = obj.positive + obj.negative + obj.pending;
-      let options = optionsMap.get(state);
-      if (options === undefined) {
-        options = new StateOptions();
-        options.state = state;
-        optionsMap.set(state, options);
-      }
-      let params: DailyData = {
-        date: date,
-        positive: obj.positive,
-        tests: obj.positive + obj.negative + obj.pending
-      };
+  readonly states = new States();
+  private stats = new Map<string, StateStats>();
 
-      options.daily.push(params);
+  constructor() {
+    let builders = new Map<string, StateStatsBuilder>();
+    for (const obj of TrackerJson) {
+      const day = new DailyStats(obj);
+      let b = builders.get(day.state_code);
+      if (b === undefined) {
+        const metadata = this.states.stateMap.get(day.state_code);
+        if (metadata === undefined) {
+          console.log(`CovidTracker: unknown state code ${day.state_code}`);
+          continue;
+        }
+        b = new StateStatsBuilder(metadata);
+        builders.set(day.state_code, b);
+      }
+      b.addDailyStats(day);
     }
-
-    let states = new Map<string, State>();
-    optionsMap.forEach((options, state, optionsMap) => {
-      const pop = populations.states.get(state);
-      if (!pop) {
-        return;
-      }
-      states.set(state, new State(options, pop));
+    builders.forEach((b, postal_code) => {
+      this.stats.set(postal_code, b.build());
     });
-    return new CovidTracker(states);
   }
 
-  private static parseDate(date: number) {
-    let format = /(\d{4})(\d{2})(\d{2})/;
-    const match = date.toString().match(format);
-    if (match.length !== 4) {
-      throw new Error('Unexpected date in data: ' + date);
-    }
-    return new Date(Number(match[1]), Number(match[2])-1, Number(match[3]));
-  }
-
-  readonly states: Map<string, State>;
-
-  private constructor(states: Map<string, State>) {
-    this.states = states;
+  getStats(postal_code: string): StateStats {
+    return this.stats.get(postal_code);
   }
 }
 

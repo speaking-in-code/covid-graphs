@@ -1,5 +1,8 @@
 <h2>{{title}}</h2>
 
+<ng-select [items]="states_available" bindLabel="name" placeholder="Select states"
+           appendTo="body" multiple="true" [(ngModel)]="states_selected"
+           (change)="onStatesChange()"></ng-select>
 <div class="row">
   <plotly-plot [data]="infections.data" [layout]="infections.layout"></plotly-plot>
 </div>
@@ -13,5 +16,5 @@
 </div>
 
 <div class="row">
-  <plotly-plot [data]="tests_per_case.data" [layout]="tests_per_case.layout"></plotly-plot>
+  <plotly-plot [data]="test_negative_rate.data" [layout]="test_negative_rate.layout"></plotly-plot>
 </div>
