@@ -84,6 +84,9 @@ export class GraphsComponent {
         this.tracker.getStats(state)));
     }
     let selected = this.route.snapshot.queryParamMap.getAll('id');
+    if (selected.length === 0) {
+      selected.push('WA', 'CA', 'NY');
+    }
     for (let id of selected) {
       this.selectState(id);
     }
