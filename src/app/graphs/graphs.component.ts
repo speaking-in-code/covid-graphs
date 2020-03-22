@@ -83,19 +83,30 @@ export class GraphsComponent {
       this.states_available.push(this.statsToSelection(
         this.tracker.getStats(state)));
     }
-    this.selectState('CA');
-    this.selectState('NY');
-    this.onStatesChange();
-    console.log(`route=${this.route}`);
-    for (let key of this.route.snapshot.queryParamMap.keys) {
-      console.log(`queryParamMap: ${key}`);
+    let selected = this.route.snapshot.queryParamMap.getAll('id');
+    for (let id of selected) {
+      this.selectState(id);
     }
-    this.route.queryParamMap.pipe(
-      switchMap((params: ParamMap) => {
-        console.log(`params are ${params}`);
-        return undefined;
-      })
-    );
+  }
+
+  // Synchronize graphs with selected states.
+  private syncGraphs(): void {
+    for (let i of this.graphs) {
+      i.data.length = 0;
+    }
+    let ids = [];
+    for (let selection of this.states_selected) {
+      this.drawState(this.selectionToStats(selection.id));
+    }
+  }
+
+  // Synchronize URL with selected states.
+  private syncUrl(): void {
+    let ids = [];
+    for (let selection of this.states_selected) {
+      ids.push(selection.id)
+    }
+    this.gotoStates(ids);
   }
 
   private selectState(postal_code: string) {
@@ -105,6 +116,7 @@ export class GraphsComponent {
       return;
     }
     this.states_selected.push(this.statsToSelection(stats));
+    this.drawState(stats);
   }
 
   private selectionToStats(postal_code: string): StateStats {
@@ -118,12 +130,16 @@ export class GraphsComponent {
     };
   }
 
+  gotoStates(selected: string[]) {
+    if (selected.length === 0){
+      selected = ['DC'];
+    }
+    this.router.navigate(['/graphs'], { queryParams: { id: selected}});
+
+  }
+
   onStatesChange(): void {
-    for (let i of this.graphs) {
-      i.data.length = 0;
-    }
-    for (let selection of this.states_selected) {
-      this.drawState(this.selectionToStats(selection.id));
-    }
+    this.syncGraphs();
+    this.syncUrl();
   }
 }
