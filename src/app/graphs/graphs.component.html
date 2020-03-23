@@ -2,20 +2,20 @@
            appendTo="body" multiple="true" [(ngModel)]="states_selected"
            (change)="onStatesSelectedChange()" ></ng-select>
 
-<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.fastest_growth }">Fastest Growing</a>
+<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.fastest_growth }">
+  Fastest Growing (areas with > 100 infections)</a>
+
+<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.largest_outbreaks }">Largest Outbreaks</a>
+
+<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.largest_infection_rates }">
+  Largest Infection Rates</a>
 
 <div class="row">
   <plotly-plot [data]="data.infections.data" [layout]="data.infections.layout"></plotly-plot>
-</div>
-
-<div class="row">
   <plotly-plot [data]="data.growth.data" [layout]="data.growth.layout"></plotly-plot>
 </div>
 
 <div class="row">
   <plotly-plot [data]="data.infection_rate.data" [layout]="data.infection_rate.layout"></plotly-plot>
-</div>
-
-<div class="row">
   <plotly-plot [data]="data.test_negative_rate.data" [layout]="data.test_negative_rate.layout"></plotly-plot>
 </div>

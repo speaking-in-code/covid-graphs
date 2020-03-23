@@ -42,7 +42,6 @@ export class GraphsComponent {
    * Called when user updates selection widget. Not invoked
    */
   onStatesSelectedChange(): void {
-    console.log(`onStatesChange invoked: ${JSON.stringify(this.states_selected.join(' '))}`);
     let ids = [];
     this.states_selected.forEach((selection) => {
       ids.push(selection.id);
@@ -55,14 +54,12 @@ export class GraphsComponent {
    * Called when query params in URL are changed.
    */
   private onQueryParamsChanged(params: ParamMap): void {
-    console.log(`onQueryParamsChanged invoked`);
     // ng-select change detection is subtle, see https://github.com/ng-select/ng-select/blob/master/README.md note on
     // Change Detection.
     this.states_selected = [];
     params.getAll('id').forEach((id) => {
       const stats = this.tracker.getStats(id);
       if (stats) {
-        console.log(`adding stats for ${id}`);
         this.states_selected.push(this.statsToSelection(stats));
       }
     });

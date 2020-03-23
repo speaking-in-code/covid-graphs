@@ -64,7 +64,6 @@ export class GraphsData {
       console.log(`drawState: undefined`);
       return;
     }
-    console.log(`drawing state: ${data.metadata.code}`);
     const code = data.metadata.code;
     this.infections.data.push({
       x: data.dates, y: data.positives, type: 'scatter', mode: 'lines+points', name: code
