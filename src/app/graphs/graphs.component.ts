@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import { MatChip } from "@angular/material/chips";
 
 import {CovidTracker, StateStats} from "../covidtracker";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
@@ -10,6 +11,12 @@ interface Selection {
   id: string;
   // User visible name of option.
   name: string;
+}
+
+interface Chip {
+  name: string;
+  selected: boolean;
+  readonly selection: Set<string>
 }
 
 @Component({
@@ -24,10 +31,31 @@ export class GraphsComponent {
   states_available: Selection[] = [];
   states_selected: Selection[] = [];
 
+  largest_outbreaks: Chip = {
+    name: 'outbreaks',
+    selected: false,
+    selection: new Set(this.tracker.largest_outbreaks)
+  };
+
+  largest_infection_rates: Chip = {
+    name: 'infections',
+    selected: false,
+    selection: new Set(this.tracker.largest_infection_rates)
+  };
+
+  fastest_growth: Chip = {
+    name: 'growth',
+    selected: false,
+    selection: new Set(this.tracker.fastest_growth)
+  };
+
+  private readonly chips = [this.largest_outbreaks, this.largest_infection_rates, this.fastest_growth];
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     let states = Array.from(this.tracker.states.stateMap.keys()).sort();
@@ -39,7 +67,29 @@ export class GraphsComponent {
   }
 
   /**
-   * Called when user updates selection widget. Not invoked
+   * Called when a user selects/unselects the chips.
+   */
+  onStatesChipClick(chip: Chip) {
+    if (!chip.selected) {
+      // States currently off, flip on.
+      let toAdd = new Set(chip.selection);
+      this.states_selected.forEach((selection) => {
+        toAdd.delete(selection.id);
+      });
+      toAdd.forEach((remaining) => {
+        this.states_selected.push(this.postalCodeToSelection(remaining));
+      })
+    } else {
+      // States currenlty on, flip them off.
+      this.states_selected = this.states_selected.filter((selection: Selection) => {
+        return !chip.selection.has(selection.id);
+      });
+    }
+    this.onStatesSelectedChange();
+  }
+
+  /**
+   * Called when user updates selection widget.
    */
   onStatesSelectedChange(): void {
     let ids = [];
@@ -64,9 +114,12 @@ export class GraphsComponent {
       }
     });
     this.syncGraphs();
+    this.syncChips();
   }
 
   // Synchronize graphs with selected states.
+  // This is really slow and triggers chrome violations. Figure out if there is a way to move it off the event
+  // handling thread maybe...?
   private syncGraphs(): void {
     this.data.clearGraphs();
     let ids = [];
@@ -75,8 +128,23 @@ export class GraphsComponent {
     }
   }
 
+  private syncChips(): void {
+    this.chips.forEach((chip) => {
+      let toMatch = new Set<string>(chip.selection);
+      let count = 0;
+      this.states_selected.forEach((selection) => {
+        toMatch.delete(selection.id)
+      });
+      chip.selected = toMatch.size === 0;
+    });
+  }
+
   private selectionToStats(selection: Selection): StateStats {
     return this.tracker.getStats(selection.id);
+  }
+
+  private postalCodeToSelection(postal_code: string): Selection {
+    return this.statsToSelection(this.tracker.getStats(postal_code));
   }
 
   private statsToSelection(state: StateStats): Selection {

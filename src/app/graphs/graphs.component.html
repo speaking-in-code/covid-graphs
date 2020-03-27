@@ -1,15 +1,33 @@
-<ng-select [items]="states_available" bindLabel="name" placeholder="Select states"
-           appendTo="body" multiple="true" [(ngModel)]="states_selected"
-           (change)="onStatesSelectedChange()" ></ng-select>
 
-<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.fastest_growth }">
-  Fastest Growing (areas with > 100 infections)</a>
+<mat-card>
+  <!-- TODO: this takes up too much room, allow to show/hide the tool bar -->
+  <ng-select [items]="states_available"
+             appearance="outline"
+             bindLabel="name" placeholder="Select States"
+             appendTo="body" multiple="true" [(ngModel)]="states_selected"
+             (change)="onStatesSelectedChange()" ></ng-select>
+  <!-- Not 100% confident of UX pattern here. Ended up deciding that selecting a chip puts the
+  specified states in the search bar, and that unselecting them removes those states. That gets
+  a little weird when users have overlapping selections. -->
+  <mat-chip-list multiple="true">
+    <mat-chip (click)="onStatesChipClick(this.largest_outbreaks)"
+              [selected]="this.largest_outbreaks.selected">
+      Largest Outbreaks
+    </mat-chip>
+    <mat-chip (click)="onStatesChipClick(this.largest_infection_rates)"
+              [selected]="this.largest_infection_rates.selected">
+      Highest Infection Rates
+    </mat-chip>
+    <mat-chip (click)="onStatesChipClick(this.fastest_growth)"
+              [selected]="this.fastest_growth.selected">
+      Fastest Growth
+    </mat-chip>
+  </mat-chip-list>
+</mat-card>
 
-<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.largest_outbreaks }">Largest Outbreaks</a>
 
-<a [routerLink]="['/graphs']" [queryParams]="{ id: tracker.largest_infection_rates }">
-  Largest Infection Rates</a>
-
+<!-- UI design idea: don't rely on scrolling to find graphs. Instead have click targets that take you
+to a full-screen graph. Or maybe leave the selection bar? -->
 <div class="row">
   <plotly-plot [data]="data.infections.data" [layout]="data.infections.layout"></plotly-plot>
   <plotly-plot [data]="data.growth.data" [layout]="data.growth.layout"></plotly-plot>
