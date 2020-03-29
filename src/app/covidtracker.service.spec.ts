@@ -21,10 +21,10 @@ describe('CovidTrackerService', () => {
     expect(ca.positives[1]).toEqual(53);
     expect(ca.positives[2]).toEqual(60);
     expect(ca.positives[3]).toEqual(69);
-    expect(ca.smoothed_growth_rate[0]).toEqual(NaN);
-    expect(ca.smoothed_growth_rate[1]).toEqual(NaN);
-    expect(ca.smoothed_growth_rate[2]).toBeCloseTo(0.06399);
-    expect(ca.smoothed_growth_rate[3]).toBeCloseTo(0.14100);
+    expect(ca.smoothedGrowthRate[0]).toEqual(NaN);
+    expect(ca.smoothedGrowthRate[1]).toEqual(NaN);
+    expect(ca.smoothedGrowthRate[2]).toBeCloseTo(0.06399);
+    expect(ca.smoothedGrowthRate[3]).toBeCloseTo(0.14100);
   });
 
   let fakeData = [
@@ -65,17 +65,17 @@ describe('CovidTrackerService', () => {
 
   it('selects fastest growth rates', () => {
     let tracker = new CovidTrackerService({trackerJson: fakeData});
-    expect(tracker.fastest_growth).toEqual(['MN', 'LA', 'WA', 'AK', 'NY']);
+    expect(tracker.fastestGrowth).toEqual(['MN', 'LA', 'WA', 'AK', 'NY']);
   });
 
   it('selects highest infection rates', () => {
     let tracker = new CovidTrackerService({trackerJson: fakeData});
-    expect(tracker.largest_infection_rates).toEqual(['AK', 'LA', 'MN', 'OH', 'WA']);
+    expect(tracker.largestInfectionRates).toEqual(['AK', 'LA', 'MN', 'OH', 'WA']);
   });
 
   it('selects largest outbreak', () => {
     let tracker = new CovidTrackerService({trackerJson: fakeData});
-    expect(tracker.largest_outbreaks).toEqual(['OH', 'MN', 'LA', 'WA', 'AK']);
+    expect(tracker.largestOutbreaks).toEqual(['OH', 'MN', 'LA', 'WA', 'AK']);
   });
 
   it('handles too few states', () => {
@@ -84,13 +84,13 @@ describe('CovidTrackerService', () => {
         {state: 'FL', date: 20200302, positive: 10},
         {state: 'FL', date: 20200303, positive: 99},
     ]});
-    expect(tracker.largest_outbreaks).toEqual(['FL']);
+    expect(tracker.largestOutbreaks).toEqual(['FL']);
   });
 
   it('handles no states', () => {
     let tracker = new CovidTrackerService({trackerJson: [
-      ]});
-    expect(tracker.largest_outbreaks).toEqual([]);
+      ], debugTopK: false});
+    expect(tracker.largestOutbreaks).toEqual([]);
   });
 });
 

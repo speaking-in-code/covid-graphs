@@ -98,13 +98,13 @@ export class StateStats {
   readonly negatives: Array<number> = [];
 
   // Positives per million people
-  readonly positives_per_mil: Array<number> = [];
+  readonly positivesPerMil: Array<number> = [];
 
   // Daily growth rate, average over previous 2 days.
-  readonly smoothed_growth_rate: Array<number> = [];
+  readonly smoothedGrowthRate: Array<number> = [];
 
   // What fraction of tests case back negative on a given day?
-  readonly test_negative_rate: Array<number> = [];
+  readonly testNegativeRate: Array<number> = [];
 
   constructor(builder: StateStatsBuilder) {
     this.metadata = builder.metadata;
@@ -157,13 +157,13 @@ export class StateStats {
 
   private initInfectionRate(builder: StateStatsBuilder) {
     for (const positive of this.positives) {
-      this.positives_per_mil.push(
+      this.positivesPerMil.push(
         positive / (this.metadata.population / 1000000));
     }
   }
 
   private initGrowthRate(builder: StateStatsBuilder) {
-    this.smoothed_growth_rate.push(NaN, NaN);
+    this.smoothedGrowthRate.push(NaN, NaN);
     for (let i = 2; i < this.positives.length; ++i) {
       let orig = this.positives[i - 2];
       let now = this.positives[i];
@@ -171,28 +171,28 @@ export class StateStats {
       if (orig > 0) {
         increase = Math.pow(now / orig, 1 / 2) - 1.0;
       }
-      this.smoothed_growth_rate.push(increase);
+      this.smoothedGrowthRate.push(increase);
     }
   }
 
   private initTestNegativeRate() {
-    let prev_positive = 0;
-    let prev_negative = 0;
-    let negative_rate = [];
+    let prevPositive = 0;
+    let prevNegative = 0;
+    let negativeRate = [];
     for (let i = 0; i < this.positives.length; ++i) {
-      let new_positive = this.positives[i] - prev_positive;
-      prev_positive = new_positive;
+      let new_positive = this.positives[i] - prevPositive;
+      prevPositive = new_positive;
 
-      let new_negative = this.negatives[i] - prev_negative;
-      prev_negative = new_negative;
+      let new_negative = this.negatives[i] - prevNegative;
+      prevNegative = new_negative;
 
       this.debugLog(`new_pos=${new_positive} new_neg=${new_negative}`);
       // negative_rate.push(new_negative / (new_positive + new_negative));
-      negative_rate.push(new_negative / (new_positive));
+      negativeRate.push(new_negative / (new_positive));
     }
-    negative_rate = StateStats.smooth(negative_rate, 2);
-    for (let r of negative_rate) {
-      this.test_negative_rate.push(r);
+    negativeRate = StateStats.smooth(negativeRate, 2);
+    for (let r of negativeRate) {
+      this.testNegativeRate.push(r);
     }
   }
 
@@ -238,16 +238,16 @@ export class CovidTrackerService {
   readonly states = new States();
 
   /** States with fastest growth rates, top 5. */
-  readonly fastest_growth: string[];
+  readonly fastestGrowth: string[];
 
   /** States with biggest outbreaks, top 5. */
-  readonly largest_outbreaks: string[];
+  readonly largestOutbreaks: string[];
 
   /** States with largest infection rates, top 5. */
-  readonly largest_infection_rates: string[];
+  readonly largestInfectionRates: string[];
 
-  getStats(postal_code: string): StateStats {
-    return this.stats.get(postal_code);
+  getStats(postalCode: string): StateStats {
+    return this.stats.get(postalCode);
   }
 
   private stats = new Map<string, StateStats>();
@@ -280,18 +280,16 @@ export class CovidTrackerService {
     builders.forEach((b, postal_code) => {
       this.stats.set(postal_code, b.build());
     });
-    this.fastest_growth = this.topK('fastest growth',
+    this.fastestGrowth = this.topK('fastest growth',
       (state) => Arrays.last(state.positives) >= 100,
-      (state) => state.smoothed_growth_rate);
-    this.largest_infection_rates = this.topK('largest infection rates',
+      (state) => state.smoothedGrowthRate);
+    this.largestInfectionRates = this.topK('largest infection rates',
       (state) => true,
-      (state) => state.positives_per_mil);
-    this.largest_outbreaks = this.topK('largest outbreaks',
+      (state) => state.positivesPerMil);
+    this.largestOutbreaks = this.topK('largest outbreaks',
       (state) => true,
       (state) => state.positives);
   }
-
-  private static kDebugTopK = false;
 
   /**
    * Finds the top 5 states based on the metric array returned by the extraction function.
@@ -310,11 +308,11 @@ export class CovidTrackerService {
       }
     }
     top.sort((a, b) => {
-      let state_a = this.stats.get(a);
-      let state_b = this.stats.get(b);
-      let val_a = Arrays.last(extractFn(state_a));
-      let val_b = Arrays.last(extractFn(state_b));
-      return Arrays.compareDescending(val_a, val_b);
+      let stateA = this.stats.get(a);
+      let stateB = this.stats.get(b);
+      let valA = Arrays.last(extractFn(stateA));
+      let valB = Arrays.last(extractFn(stateB));
+      return Arrays.compareDescending(valA, valB);
     });
     if (top.length > CovidTrackerService.kSummarySize) {
       top.length = CovidTrackerService.kSummarySize;

@@ -8,11 +8,13 @@ import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
 import { GraphsComponent } from "./graphs.component";
 import { SelectorComponent } from './selector/selector.component';
+import { InfectionsComponent } from './infections/infections.component';
 
 @NgModule({
   declarations: [
     GraphsComponent,
-    SelectorComponent
+    SelectorComponent,
+    InfectionsComponent
   ],
   exports: [
     GraphsComponent

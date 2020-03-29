@@ -3,20 +3,7 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import { CovidTrackerService, StateStats } from "../covidtracker.service";
 import { GraphsData } from "./graphs-data";
-
-/** Interface to ng-select widget. */
-interface Selection {
-  // Logical ID.
-  id: string;
-  // User visible name of option.
-  name: string;
-}
-
-interface Chip {
-  name: string;
-  selected: boolean;
-  readonly selection: Set<string>
-}
+import { PrefsObserver, ChosenStates } from "./prefs-observer.service";
 
 @Component({
   selector: 'app-graphs',
@@ -25,40 +12,16 @@ interface Chip {
 })
 export class GraphsComponent {
   data = new GraphsData(this.tracker);
-  private selected: StateStats[] = [];
 
   constructor(private tracker: CovidTrackerService,
-              private route: ActivatedRoute) {
+              private selected: PrefsObserver) {
+    selected.chosenStates().subscribe(this.onChosenStatesChange.bind(this));
   }
 
-  ngOnInit() {
-    this.route.queryParamMap.subscribe(this.onQueryParamsChanged.bind(this));
-  }
-
-  /**
-   * Called when query params in URL are changed.
-   *
-   * TODO: maybe refactor this into its own service, shared between conmponents?
-   */
-  private onQueryParamsChanged(params: ParamMap): void {
-    this.selected = [];
-    params.getAll('id').forEach((id) => {
-      const stats = this.tracker.getStats(id);
-      if (stats) {
-        this.selected.push(stats);
-      }
-    });
-    this.syncGraphs();
-  }
-
-  // Synchronize graphs with selected states.
-  // This is really slow and triggers chrome violations. Figure out if there is a way to move it off the event
-  // handling thread maybe...?
-  private syncGraphs(): void {
+  private onChosenStatesChange(states: ChosenStates) {
     this.data.clearGraphs();
-    let ids = [];
-    for (let selection of this.selected) {
-      this.data.drawState(selection);
+    for (let state of states.states) {
+      this.data.drawState(state);
     }
   }
 }

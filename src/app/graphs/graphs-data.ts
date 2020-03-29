@@ -30,7 +30,7 @@ export class GraphsData {
     }
   };
 
-  public infection_rate = {
+  public infectionRate = {
     data: [],
     layout: {
       width: 900, height: 600, title: 'Covid19 Infections per Million People',
@@ -38,7 +38,7 @@ export class GraphsData {
     }
   };
 
-  public test_negative_rate = {
+  public testNegativeRate = {
     data: [],
     layout: {
       width: 900, height: 600, title: 'Covid19 Tests per New Confirmed Case',
@@ -51,7 +51,7 @@ export class GraphsData {
     }
   };
 
-  private all = [this.infections, this.growth, this.infection_rate, this.test_negative_rate];
+  private all = [this.infections, this.growth, this.infectionRate, this.testNegativeRate];
 
   public clearGraphs(): void {
     for (let i of this.all) {
@@ -70,14 +70,14 @@ export class GraphsData {
     });
     this.scaleY(this.infections);
     this.growth.data.push({
-      x: data.dates, y: data.smoothed_growth_rate, type: 'scatter', mode: 'lines+points', name: code
+      x: data.dates, y: data.smoothedGrowthRate, type: 'scatter', mode: 'lines+points', name: code
     });
-    this.infection_rate.data.push({
-      x: data.dates, y: data.positives_per_mil, type: 'scatter', mode: 'lines+points', name: code
+    this.infectionRate.data.push({
+      x: data.dates, y: data.positivesPerMil, type: 'scatter', mode: 'lines+points', name: code
     });
-    this.scaleY(this.infection_rate);
-    this.test_negative_rate.data.push({
-      x: data.dates, y: data.test_negative_rate, type: 'scatter', mode: 'lines+points', name: code
+    this.scaleY(this.infectionRate);
+    this.testNegativeRate.data.push({
+      x: data.dates, y: data.testNegativeRate, type: 'scatter', mode: 'lines+points', name: code
     });
   }
 
