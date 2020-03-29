@@ -1,5 +1,6 @@
 // Parses data from covidtracker.com
 
+import { Injectable } from "@angular/core";
 import TrackerJson from '../assets/daily.json';
 // States data from Table 2. Cumulative Estimates of Resident Population Change for the United States,
 // Regions, States, and Puerto Rico and Region and State Rankings: April 1, 2010 to July 1, 2019 (NST-EST2019-02)
@@ -218,20 +219,21 @@ export class States {
 }
 
 // Optional interface to use for creating CovidTracker.
-export interface CovidTrackerRawData {
-  trackerJson?: any;
-  debugTopK?: boolean;
+@Injectable({
+  providedIn: 'root'
+})
+export class CovidTrackerRawData {
+  trackerJson: any = TrackerJson;
+  debugTopK? = false;
 };
 
 /**
  * CovidTracker has all of our statistical data.
  */
-export class CovidTracker {
-  /** Create a tracker. Default is to use real raw data. */
-  public static create(rawData: CovidTrackerRawData = {trackerJson: TrackerJson, debugTopK: false}) {
-    return new CovidTracker(rawData);
-  }
-
+@Injectable({
+  providedIn: 'root',
+})
+export class CovidTrackerService {
   /** All states */
   readonly states = new States();
 
@@ -252,8 +254,8 @@ export class CovidTracker {
   private debugTopK: boolean;
   private static kSummarySize = 5;
 
-  /** Get stats for a state given the postal code */
-  private constructor(rawData: CovidTrackerRawData) {
+  /** Create a tracker. Default is to use real raw data. */
+  constructor(rawData: CovidTrackerRawData) {
     this.debugTopK = rawData.debugTopK;
     let builders = new Map<string, StateStatsBuilder>();
     let unknownStates = new Set<string>();
@@ -314,8 +316,8 @@ export class CovidTracker {
       let val_b = Arrays.last(extractFn(state_b));
       return Arrays.compareDescending(val_a, val_b);
     });
-    if (top.length > CovidTracker.kSummarySize) {
-      top.length = CovidTracker.kSummarySize;
+    if (top.length > CovidTrackerService.kSummarySize) {
+      top.length = CovidTrackerService.kSummarySize;
     }
     if (this.debugTopK) {
       let debug = [];

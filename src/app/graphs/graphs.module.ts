@@ -7,10 +7,12 @@ import { GraphsRoutingModule } from './graphs-routing.module';
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
 import { GraphsComponent } from "./graphs.component";
+import { SelectorComponent } from './selector/selector.component';
 
 @NgModule({
   declarations: [
-    GraphsComponent
+    GraphsComponent,
+    SelectorComponent
   ],
   exports: [
     GraphsComponent

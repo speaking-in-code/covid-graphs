@@ -1,5 +1,5 @@
+import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import {MediaMatcher} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +8,12 @@ import {MediaMatcher} from '@angular/cdk/layout';
 })
 export class AppComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
+  text: "foo";
 
   fillerNav = [
     'About',
     'Feedback'
-   ]; // Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
+  ];
 
   private _mobileQueryListener: () => void;
 

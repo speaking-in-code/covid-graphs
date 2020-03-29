@@ -1,7 +1,7 @@
-import {CovidTracker, StateStats} from "../covidtracker";
+import {CovidTrackerService, StateStats} from "../covidtracker.service";
 
 export class GraphsData {
-  constructor(private tracker: CovidTracker) {
+  constructor(private tracker: CovidTrackerService) {
   }
 
   // TODO(beaton): remove x-axis scrolling

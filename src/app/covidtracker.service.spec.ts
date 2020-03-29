@@ -1,13 +1,19 @@
-import {CovidTracker} from './covidtracker';
+import { TestBed } from "@angular/core/testing";
+import { CovidTrackerService } from "./covidtracker.service";
 
-describe('CovidTracker', () => {
+describe('CovidTrackerService', () => {
+  let realData: CovidTrackerService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    realData = TestBed.inject(CovidTrackerService);
+  });
+
   it(`should parse without errors`, () => {
-    let realData = CovidTracker.create();
     expect(realData).toBeTruthy('Failed to parse real covid tracker data');
   });
 
   it('should have right CA data', () => {
-    let realData = CovidTracker.create();
     let ca = realData.getStats('CA')
     expect(ca.dates[0]).toEqual(new Date(2020, 2, 4));
     expect(ca.dates[1]).toEqual(new Date(2020, 2, 5));
@@ -58,22 +64,22 @@ describe('CovidTracker', () => {
   ];
 
   it('selects fastest growth rates', () => {
-    let tracker = CovidTracker.create({trackerJson: fakeData});
+    let tracker = new CovidTrackerService({trackerJson: fakeData});
     expect(tracker.fastest_growth).toEqual(['MN', 'LA', 'WA', 'AK', 'NY']);
   });
 
   it('selects highest infection rates', () => {
-    let tracker = CovidTracker.create({trackerJson: fakeData});
+    let tracker = new CovidTrackerService({trackerJson: fakeData});
     expect(tracker.largest_infection_rates).toEqual(['AK', 'LA', 'MN', 'OH', 'WA']);
   });
 
   it('selects largest outbreak', () => {
-    let tracker = CovidTracker.create({trackerJson: fakeData});
+    let tracker = new CovidTrackerService({trackerJson: fakeData});
     expect(tracker.largest_outbreaks).toEqual(['OH', 'MN', 'LA', 'WA', 'AK']);
   });
 
   it('handles too few states', () => {
-    let tracker = CovidTracker.create({trackerJson: [
+    let tracker = new CovidTrackerService({trackerJson: [
         {state: 'FL', date: 20200301, positive: 1},
         {state: 'FL', date: 20200302, positive: 10},
         {state: 'FL', date: 20200303, positive: 99},
@@ -82,7 +88,7 @@ describe('CovidTracker', () => {
   });
 
   it('handles no states', () => {
-    let tracker = CovidTracker.create({trackerJson: [
+    let tracker = new CovidTrackerService({trackerJson: [
       ]});
     expect(tracker.largest_outbreaks).toEqual([]);
   });
