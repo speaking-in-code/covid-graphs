@@ -4,8 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from "./app.component";
 
 const appRoutes: Routes = [
-//   { path: '', redirectTo: '/graphs', pathMatch: 'full' },
-  { path: '', component: AppComponent }
+  { path: '', component: AppComponent, pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Arrays } from "./arrays";
-import { PrefsObserver, ChosenStates } from "./prefs-observer.service";
+import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.service";
 
 /**
  * Parent class for graphs that respond to state selection changes.

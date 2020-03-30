@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { CovidTrackerService, StateStats } from "./covidtracker.service";
-import { PrefsObserver, ChosenStates } from "./prefs-observer.service";
+import { CovidTrackerService, StateStats } from "../covidtracker/covidtracker.service";
+import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.service";
 
 
 /** Interface to ng-select widget. */

@@ -1,13 +1,13 @@
 // Parses data from covidtracker.com
 
 import { Injectable } from "@angular/core";
-import TrackerJson from '../assets/daily.json';
+import TrackerJson from '../../assets/daily.json';
 // States data from Table 2. Cumulative Estimates of Resident Population Change for the United States,
 // Regions, States, and Puerto Rico and Region and State Rankings: April 1, 2010 to July 1, 2019 (NST-EST2019-02)
 // Source: U.S. Census Bureau, Population Division
 // Release Date: December 2019
-import StatesJson from '../assets/states.json';
-import {Arrays} from './arrays';
+import StatesJson from '../../assets/states.json';
+import { Arrays } from '../graphs/arrays';
 
 /**
  * Metadata about a state from states.json.

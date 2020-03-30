@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { GraphsComponent } from './graphs.component';
+import { GraphsComponent } from '../graphs/graphs.component';
+import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.service";
 
-import { ChosenStates, PrefsObserver } from "./prefs-observer.service";
 @Component({
   selector: 'app-graphs-infections',
   templateUrl: './infections.component.html',

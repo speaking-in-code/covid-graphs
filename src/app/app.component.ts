@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from "rxjs";
-import { ChosenStates, PrefsObserver } from "./prefs-observer.service";
+import { ChosenStates, PrefsObserver } from "./prefs-observer/prefs-observer.service";
 
 @Component({
   selector: 'app-root',
