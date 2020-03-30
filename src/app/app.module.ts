@@ -18,6 +18,8 @@ import { AppComponent } from './app.component';
 import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
 import { InfectionsComponent } from "./infections/infections.component";
 import { SelectorComponent } from "./selector/selector.component";
+import { InfectionRateComponent } from './infection-rate/infection-rate.component';
+import { TestRateComponent } from './test-rate/test-rate.component';
 
 @NgModule({
   imports: [
@@ -42,6 +44,8 @@ import { SelectorComponent } from "./selector/selector.component";
     GrowthRateComponent,
     InfectionsComponent,
     SelectorComponent,
+    InfectionRateComponent,
+    TestRateComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

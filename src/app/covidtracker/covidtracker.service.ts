@@ -187,8 +187,7 @@ export class StateStats {
       prevNegative = new_negative;
 
       this.debugLog(`new_pos=${new_positive} new_neg=${new_negative}`);
-      // negative_rate.push(new_negative / (new_positive + new_negative));
-      negativeRate.push(new_negative / (new_positive));
+      negativeRate.push(new_negative / (new_positive + new_negative));
     }
     negativeRate = StateStats.smooth(negativeRate, 2);
     for (let r of negativeRate) {
