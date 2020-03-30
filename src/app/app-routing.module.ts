@@ -2,9 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from "./app.component";
+import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
+import { InfectionRateComponent } from "./infection-rate/infection-rate.component";
+import { InfectionsComponent } from "./infections/infections.component";
+import { TestRateComponent } from "./test-rate/test-rate.component";
 
 const appRoutes: Routes = [
-  { path: '', component: AppComponent, pathMatch: 'full' }
+  { path: '', component: InfectionsComponent, pathMatch: 'full' },
+  { path: 'infections', component: InfectionsComponent, pathMatch: 'full' },
+  { path: 'test-rate', component: TestRateComponent, pathMatch: 'full' },
+  { path: 'growth', component: GrowthRateComponent, pathMatch: 'full' },
+  { path: 'infection-rate', component: InfectionRateComponent, pathMatch: 'full' },
 ];
 
 @NgModule({
