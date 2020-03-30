@@ -1,26 +1,28 @@
-<div class="container" [class.is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="primary" class="toolbar mat-elevation-z6">
-    <h1 class="app-name">US Coronavirus Spread</h1>
-    <span class="fill-remaining-space"></span>
-    <span>
-      <button mat-icon-button (click)="snav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </span>
-  </mat-toolbar>
-  <mat-sidenav-container [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #snav position="end" [mode]="mobileQuery.matches ? 'over' : 'side'"
-                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-      <mat-nav-list>
-        <a mat-list-item routerLink="." *ngFor="let nav of fillerNav">{{nav}}</a>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <app-graphs-selector></app-graphs-selector>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-  <app-graphs-selector></app-graphs-selector>
-  <router-outlet></router-outlet>
-</div>
+<!-- Better UI Design here.
+Top level toolbar, with just a title.
+Then an expansion panel for state selection. By default just summarizes states, when expanded lets you pick.
+Then tabs for each graph.
+-->
+<mat-toolbar color="primary" class="toolbar mat-elevation-z6">
+  <h1 class="app-name">US Coronavirus Spread</h1>
+</mat-toolbar>
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>States</mat-panel-title>
+      <mat-panel-description>{{states}}</mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-graphs-selector></app-graphs-selector>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-tab-group>
+  <mat-tab label="Infections">
+    <ng-template matTabContent>
+      <app-graphs-infections></app-graphs-infections>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Growth Rate">
+    Growth Rate goes here.
+  </mat-tab>
+</mat-tab-group>
 

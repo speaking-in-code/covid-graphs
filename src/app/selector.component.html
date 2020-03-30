@@ -1,0 +1,22 @@
+<ng-select [items]="availableStates"
+           appearance="outline"
+           bindLabel="name" placeholder="Select States"
+           appendTo="body" multiple="true" [(ngModel)]="selectedStates"
+           (change)="onStatesSelectedChange()" ></ng-select>
+<!-- Not 100% confident of UX pattern here. Ended up deciding that selecting a chip puts the
+specified states in the search bar, and that unselecting them removes those states. That gets
+a little weird when users have overlapping selections. -->
+<mat-chip-list multiple="true">
+  <mat-chip (click)="onStatesChipClick(this.largestOutbreaks)"
+            [selected]="this.largestOutbreaks.selected">
+    Largest Outbreaks
+  </mat-chip>
+  <mat-chip (click)="onStatesChipClick(this.largestInfectionRates)"
+            [selected]="this.largestInfectionRates.selected">
+    Highest Infection Rates
+  </mat-chip>
+  <mat-chip (click)="onStatesChipClick(this.fastestGrowth)"
+            [selected]="this.fastestGrowth.selected">
+    Fastest Growth
+  </mat-chip>
+</mat-chip-list>

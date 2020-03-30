@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { GraphsComponent } from '../graphs.component';
+import { Component } from '@angular/core';
+import { GraphsComponent } from './graphs.component';
 
-import { ChosenStates, PrefsObserver } from "../prefs-observer.service";
+import { ChosenStates, PrefsObserver } from "./prefs-observer.service";
 @Component({
   selector: 'app-graphs-infections',
   templateUrl: './infections.component.html',
@@ -27,7 +27,7 @@ export class InfectionsComponent extends GraphsComponent {
     }
   };
 
-  constructor(prefsObserver: PrefsObserver, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);
   }
 

@@ -1,5 +1,5 @@
-import { Arrays } from "../arrays";
-import {CovidTrackerService, StateStats} from "../covidtracker.service";
+import { Arrays } from "./arrays";
+import {CovidTrackerService, StateStats} from "./covidtracker.service";
 
 export class GraphsData {
   constructor(private tracker: CovidTrackerService) {

@@ -1,29 +1,39 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from "rxjs";
+import { ChosenStates, PrefsObserver } from "./prefs-observer.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
-  mobileQuery: MediaQueryList;
-  text: "foo";
+export class AppComponent implements OnInit, OnDestroy {
+  private static kMaxLabelsDisplayed = 6;
+  private subscription: Subscription;
+  states = '';
 
-  fillerNav = [
-    'About',
-    'Feedback'
-  ];
+  constructor(private prefsObserver: PrefsObserver) {
+  }
 
-  private _mobileQueryListener: () => void;
+  ngOnInit() {
+    this.subscription = this.prefsObserver.chosenStates().subscribe(
+      this.onChosenStatesChange.bind(this));
+  }
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+  private onChosenStatesChange(states: ChosenStates) {
+    let labels = [];
+    for (let i = 0; i < Math.min(AppComponent.kMaxLabelsDisplayed, states.states.length); ++i) {
+      labels.push(states.states[i].metadata.name);
+    }
+    if (labels.length < states.states.length) {
+      labels.push('...');
+    }
+    this.states = labels.join(', ');
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

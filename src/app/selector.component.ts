@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { CovidTrackerService, StateStats } from "../../covidtracker.service";
-import { PrefsObserver, ChosenStates } from "../prefs-observer.service";
+import { CovidTrackerService, StateStats } from "./covidtracker.service";
+import { PrefsObserver, ChosenStates } from "./prefs-observer.service";
 
 
 /** Interface to ng-select widget. */
@@ -98,7 +98,7 @@ export class SelectorComponent implements OnInit {
 
   // this updates the URL, which triggers onChosenStatesChange
   private gotoStates(selected: string[]) {
-    this.router.navigate(['/graphs'], { queryParams: { id: selected}});
+    this.router.navigate([], { queryParams: {id: selected}});
   }
 
   /**

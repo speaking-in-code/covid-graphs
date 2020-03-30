@@ -1,6 +1,6 @@
 import { OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Arrays } from "../arrays";
+import { Arrays } from "./arrays";
 import { PrefsObserver, ChosenStates } from "./prefs-observer.service";
 
 /**

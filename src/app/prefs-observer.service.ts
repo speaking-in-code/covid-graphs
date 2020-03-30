@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { CovidTrackerService, StateStats } from "../covidtracker.service";
+import { CovidTrackerService, StateStats } from "./covidtracker.service";
 
 export class ChosenStates {
   readonly states: StateStats[];
