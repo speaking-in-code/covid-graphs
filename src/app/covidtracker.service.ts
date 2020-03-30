@@ -246,10 +246,6 @@ export class CovidTrackerService {
   /** States with largest infection rates, top 5. */
   readonly largestInfectionRates: string[];
 
-  getStats(postalCode: string): StateStats {
-    return this.stats.get(postalCode);
-  }
-
   private stats = new Map<string, StateStats>();
   private debugTopK: boolean;
   private static kSummarySize = 5;
@@ -289,6 +285,10 @@ export class CovidTrackerService {
     this.largestOutbreaks = this.topK('largest outbreaks',
       (state) => true,
       (state) => state.positives);
+  }
+
+  getStats(postalCode: string): StateStats {
+    return this.stats.get(postalCode);
   }
 
   /**

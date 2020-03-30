@@ -1,3 +1,4 @@
+import { Arrays } from "../arrays";
 import {CovidTrackerService, StateStats} from "../covidtracker.service";
 
 export class GraphsData {
@@ -68,47 +69,18 @@ export class GraphsData {
     this.infections.data.push({
       x: data.dates, y: data.positives, type: 'scatter', mode: 'lines+points', name: code
     });
-    this.scaleY(this.infections);
+    // this.scaleY(this.infections);
     this.growth.data.push({
       x: data.dates, y: data.smoothedGrowthRate, type: 'scatter', mode: 'lines+points', name: code
     });
     this.infectionRate.data.push({
       x: data.dates, y: data.positivesPerMil, type: 'scatter', mode: 'lines+points', name: code
     });
-    this.scaleY(this.infectionRate);
+    // this.scaleY(this.infectionRate);
     this.testNegativeRate.data.push({
       x: data.dates, y: data.testNegativeRate, type: 'scatter', mode: 'lines+points', name: code
     });
   }
 
-    // Tweaks the Y axis so it renders well. Several changes needed:
-    // - setting specific ticks that are more readable (1, 2, 5, 10, 20, ...)
-    // - replacing 0 points with null, so they don't freak out on the log graph.
-  private scaleY(graph): void {
-      let max = 0;
-    for (let data of graph.data) {
-      for (let i = 0; i < data.y.length; ++i) {
-        max = Math.max(max, data.y[i]);
-        if (data.y[i] === 0) {
-          data.y[i] = null;
-        }
-      }
-    }
-    let tickvals = [];
-    let multiplier = .1;
-    while (tickvals.length === 0 || this.lastValue(tickvals) <= max) {
-      tickvals.push(1 * multiplier);
-      if (this.lastValue(tickvals) > max) break;
-      tickvals.push(2 * multiplier);
-      if (this.lastValue(tickvals) > max) break;
-      tickvals.push(5 * multiplier);
-      multiplier *= 10;
-    }
-    graph.layout.yaxis.tickvals = tickvals;
-    graph.layout.yaxis.range = [0, Math.log10(this.lastValue(tickvals))];
-  }
 
-  private lastValue(a: number[]): number {
-    return a[a.length - 1];
-  }
 }

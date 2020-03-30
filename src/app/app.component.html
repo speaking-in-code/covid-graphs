@@ -4,6 +4,7 @@
     <span class="fill-remaining-space"></span>
     <span>
       <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
       </button>
     </span>
   </mat-toolbar>
@@ -15,8 +16,11 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
+      <app-graphs-selector></app-graphs-selector>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  <app-graphs-selector></app-graphs-selector>
+  <router-outlet></router-outlet>
 </div>
 

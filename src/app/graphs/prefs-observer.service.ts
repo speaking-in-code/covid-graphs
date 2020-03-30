@@ -12,7 +12,9 @@ export class ChosenStates {
   providedIn: 'root'
 })
 export class PrefsObserver {
-  constructor(private tracker: CovidTrackerService, private route: ActivatedRoute) {}
+  constructor(private tracker: CovidTrackerService, private route: ActivatedRoute) {
+    console.log(`PrefsOserver created`);
+  }
 
   chosenStates(): Observable<ChosenStates> {
     return this.route.queryParamMap.pipe(map((params) => {
