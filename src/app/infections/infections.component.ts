@@ -10,20 +10,20 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 export class InfectionsComponent extends GraphsComponent {
   data = [];
   layout = {
-    title: 'Covid19 Infections',
     // Autosize set to true is a good idea for horizontal, but triggers bugs with vertical sizing. (Graph relayout
     // will alternate between setting svg-container height to a fixed pixel value (which works) and 100% (which
     // causes layout problems.
     // Leaving this set to true because the responsive layout really makes a big difference for the horizontal.
     autosize: true,
     height: GraphsComponent.kGraphHeight,
+    margin: GraphsComponent.kGraphMargins,
     xaxis: {
       fixedrange: true
     },
     yaxis: {
       title: 'Infections',
       type: 'log',
-      fixedrange: true
+      fixedrange: true,
     }
   };
 

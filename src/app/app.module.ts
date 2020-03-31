@@ -20,6 +20,7 @@ import { InfectionsComponent } from "./infections/infections.component";
 import { SelectorComponent } from "./selector/selector.component";
 import { InfectionRateComponent } from './infection-rate/infection-rate.component';
 import { TestRateComponent } from './test-rate/test-rate.component';
+import { TestsComponent } from './tests/tests.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { TestRateComponent } from './test-rate/test-rate.component';
     SelectorComponent,
     InfectionRateComponent,
     TestRateComponent,
+    TestsComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

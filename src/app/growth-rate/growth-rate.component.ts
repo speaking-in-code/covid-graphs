@@ -10,16 +10,18 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 export class GrowthRateComponent extends GraphsComponent {
   data = [];
   layout = {
-    title: 'Covid19 Growth Rate (smoothed)',
     autosize: true,
     height: GraphsComponent.kGraphHeight,
+    margin: GraphsComponent.kGraphMargins,
+    automargin: true,
     xaxis: {
-      fixedrange: true
+      fixedrange: true,
     },
     yaxis: {
       title: 'Growth Rate (smoothed)',
       tickformat: '%',
       fixedrange: true,
+      rangemode: 'tozero',
     }
   };
 

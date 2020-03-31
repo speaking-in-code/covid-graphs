@@ -41,6 +41,8 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
   // Height of graph in pixels. See comments in infections.ts about why this is fixed.
   protected static kGraphHeight = 450;
 
+  protected static kGraphMargins = { t: 20, pad: 0 };
+
   /**
    * Tweaks the Y axis so it renders well for log-scaled graphs
    * - setting specific ticks that are more readable (1, 2, 5, 10, 20, ...)

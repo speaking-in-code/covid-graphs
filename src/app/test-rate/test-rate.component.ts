@@ -10,9 +10,9 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 export class TestRateComponent extends GraphsComponent {
   data = [];
   layout = {
-    title: 'Covid19 Negative Test Rate (smoothed)',
     autosize: true,
     height: GraphsComponent.kGraphHeight,
+    margin: GraphsComponent.kGraphMargins,
     xaxis: {
       fixedrange: true
     },
@@ -32,7 +32,7 @@ export class TestRateComponent extends GraphsComponent {
     this.data.length = 0;
     states.states.forEach((stateStats) => {
       this.data.push({
-        x: stateStats.dates, y: stateStats.testNegativeRate, type: 'scatter', mode: 'lines+points',
+        x: stateStats.dates, y: stateStats.smoothedNegativeRate, type: 'scatter', mode: 'lines+points',
         name: stateStats.metadata.code
       });
     });

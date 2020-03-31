@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTab } from "@angular/material/tabs";
 import { Subscription } from "rxjs";
-import { ChosenStates, ChosenTab, PrefsObserver } from "./prefs-observer/prefs-observer.service";
+import { ChosenStates, PrefsObserver } from "./prefs-observer/prefs-observer.service";
 
 @Component({
   selector: 'app-root',
@@ -15,9 +14,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   navLinks = [
     { path: 'infections', label: 'Infections'},
-    { path: 'test-rate', label: 'Test Rates'},
-    { path: 'infection-rate', label: 'Infections Per Million'},
     { path: 'growth', label: 'Growth Rates' },
+    { path: 'infection-rate', label: 'Infections Per Million'},
+    { path: 'tests', label: 'Negative Tests'},
+    { path: 'test-rate', label: 'Negative Test Rate'},
   ];
   constructor(private prefsObserver: PrefsObserver) {
   }

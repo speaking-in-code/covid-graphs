@@ -89,29 +89,38 @@ export class StateStats {
   readonly metadata: StateMetadata;
 
   // Dates for which we have data, parallel array with others below.
-  readonly dates: Array<Date> = [];
+  readonly dates: Date[] = [];
 
   // Total positives in the state
-  readonly positives: Array<number> = [];
+  readonly positives: number[] = [];
 
   // Total negatives in the state.
-  readonly negatives: Array<number> = [];
+  readonly negatives: number[] = [];
 
   // Positives per million people
-  readonly positivesPerMil: Array<number> = [];
+  readonly positivesPerMil: number[];
 
-  // Daily growth rate, average over previous 2 days.
-  readonly smoothedGrowthRate: Array<number> = [];
+  // Daily growth rate.
+  readonly smoothedGrowthRate: number[];
 
   // What fraction of tests case back negative on a given day?
-  readonly testNegativeRate: Array<number> = [];
+  readonly smoothedNegativeRate: number[] = [];
+
+  // How many negative tests were run each day?
+  readonly negativeTestsPerDay: number[] = [];
+
+  // Smooth data over one week.
+  private static readonly kSmoothingDays = 7;
+
+  // Minimum number of positives before calculating growth rates.
+  private static readonly kMinPositives = 100;
 
   constructor(builder: StateStatsBuilder) {
     this.metadata = builder.metadata;
     this.initDates(builder);
-    this.initInfectionRate(builder);
-    this.initGrowthRate(builder);
-    this.initTestNegativeRate();
+    this.positivesPerMil = this.initInfectionRate(builder);
+    this.smoothedGrowthRate = this.initGrowthRate(builder);
+    this.initNegativeTestInfo();
   }
 
   private initDates(builder: StateStatsBuilder) {
@@ -137,66 +146,37 @@ export class StateStats {
     }
   }
 
-  // Smooth values in the array over the previous prev days.
-  private static smooth(a: number[], prev: number): number[] {
-    let s = [];
-    for (let i = 0; i < a.length; ++i) {
-      let sum = 0;
-      let days = 0;
-      for (let j = i - prev; j <= i; ++j) {
-        if (j < 0) {
-          continue;
-        }
-        ++days;
-        sum += a[j];
-      }
-      s.push(sum / days);
-    }
-    return s;
-  }
-
-  private initInfectionRate(builder: StateStatsBuilder) {
+  private initInfectionRate(builder: StateStatsBuilder): number[] {
+    let ppm = []
     for (const positive of this.positives) {
-      this.positivesPerMil.push(
-        positive / (this.metadata.population / 1000000));
+      ppm.push(positive / (this.metadata.population / 1000000));
     }
+    return ppm;
   }
 
-  private initGrowthRate(builder: StateStatsBuilder) {
-    this.smoothedGrowthRate.push(NaN, NaN);
-    for (let i = 2; i < this.positives.length; ++i) {
-      let orig = this.positives[i - 2];
-      let now = this.positives[i];
-      let increase = NaN;
-      if (orig > 0) {
-        increase = Math.pow(now / orig, 1 / 2) - 1.0;
+  private initGrowthRate(builder: StateStatsBuilder): number[] {
+    let rate = Arrays.smoothGrowthRate(this.positives, StateStats.kSmoothingDays);
+    for (let i = 0; i < rate.length; ++i) {
+      if (this.positives[i] < StateStats.kMinPositives) {
+        rate[i] = NaN;
       }
-      this.smoothedGrowthRate.push(increase);
     }
+    return rate;
   }
 
-  private initTestNegativeRate() {
-    let prevPositive = 0;
-    let prevNegative = 0;
-    let negativeRate = [];
-    for (let i = 0; i < this.positives.length; ++i) {
-      let new_positive = this.positives[i] - prevPositive;
-      prevPositive = new_positive;
-
-      let new_negative = this.negatives[i] - prevNegative;
-      prevNegative = new_negative;
-
-      this.debugLog(`new_pos=${new_positive} new_neg=${new_negative}`);
-      negativeRate.push(new_negative / (new_positive + new_negative));
-    }
-    negativeRate = StateStats.smooth(negativeRate, 2);
-    for (let r of negativeRate) {
-      this.testNegativeRate.push(r);
+  private initNegativeTestInfo() {
+    let negativesPerDay = Arrays.smoothIncrease(this.negatives, StateStats.kSmoothingDays);
+    this.debugLog(`negatives: ${this.negatives.join(' ')}`);
+    this.debugLog(`negativesPerDay: ${negativesPerDay.join(' ')}`);
+    Arrays.copy(negativesPerDay, this.negativeTestsPerDay);
+    let positivesPerDay = Arrays.smoothIncrease(this.positives, StateStats.kSmoothingDays);
+    for (let i = 0; i < negativesPerDay.length; ++i) {
+      this.smoothedNegativeRate.push(negativesPerDay[i] / (negativesPerDay[i] + positivesPerDay[i]));
     }
   }
 
   private debugLog(str: string) {
-    if (this.metadata.code === 'DISABLED') {
+    if (this.metadata.code === 'none') {
       console.log(str);
     }
   }
@@ -245,6 +225,9 @@ export class CovidTrackerService {
   /** States with largest infection rates, top 5. */
   readonly largestInfectionRates: string[];
 
+  /** States with the most testing, top 5. */
+  readonly mostTesting: string[];
+
   private stats = new Map<string, StateStats>();
   private debugTopK: boolean;
   private static kSummarySize = 5;
@@ -284,6 +267,9 @@ export class CovidTrackerService {
     this.largestOutbreaks = this.topK('largest outbreaks',
       (state) => true,
       (state) => state.positives);
+    this.mostTesting = this.topK('most testing',
+      (state) => true,
+      (state) => state.negativeTestsPerDay);
   }
 
   getStats(postalCode: string): StateStats {

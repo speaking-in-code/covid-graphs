@@ -13,7 +13,7 @@ interface Selection {
 }
 
 interface Chip {
-  name: string;
+  label: string;
   selected: boolean;
   readonly selection: Set<string>
 }
@@ -27,25 +27,28 @@ export class SelectorComponent implements OnInit {
   availableStates: Selection[] = [];
   selectedStates: Selection[] = [];
 
-  largestOutbreaks: Chip = {
-    name: 'outbreaks',
-    selected: false,
-    selection: new Set(this.tracker.largestOutbreaks)
-  };
-
-  largestInfectionRates: Chip = {
-    name: 'infections',
-    selected: false,
-    selection: new Set(this.tracker.largestInfectionRates)
-  };
-
-  fastestGrowth: Chip = {
-    name: 'growth',
-    selected: false,
-    selection: new Set(this.tracker.fastestGrowth)
-  };
-
-  private readonly chips = [this.largestOutbreaks, this.largestInfectionRates, this.fastestGrowth];
+  chips: Chip[] = [
+    {
+      label: 'Largest Outbreaks',
+      selected: false,
+      selection: new Set(this.tracker.largestOutbreaks)
+    },
+    {
+      label: 'Highest Infection Rates',
+      selected: false,
+      selection: new Set(this.tracker.largestInfectionRates)
+    },
+    {
+      label: 'Fastest Growth',
+      selected: false,
+      selection: new Set(this.tracker.fastestGrowth)
+    },
+    {
+      label: 'Most Testing',
+      selected: false,
+      selection: new Set(this.tracker.mostTesting)
+    },
+  ];
 
   constructor(
     private tracker: CovidTrackerService,

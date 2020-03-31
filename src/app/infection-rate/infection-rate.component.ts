@@ -10,9 +10,9 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 export class InfectionRateComponent extends GraphsComponent {
   data = [];
   layout = {
-    title: 'Covid19 Infections per Million People',
     autosize: true,
     height: GraphsComponent.kGraphHeight,
+    margin: GraphsComponent.kGraphMargins,
     xaxis: {
       fixedrange: true
     },
@@ -22,7 +22,8 @@ export class InfectionRateComponent extends GraphsComponent {
       dtick: '',
       autorange: true,
       rangemode: 'tozero',
-      fixedrange: true
+      fixedrange: true,
+      hoverformat: '.0f',
     }
   };
 
