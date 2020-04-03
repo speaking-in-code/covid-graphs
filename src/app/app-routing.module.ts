@@ -8,6 +8,7 @@ import { InfectionsComponent } from "./infections/infections.component";
 import { TestRateComponent } from "./test-rate/test-rate.component";
 import { TestsComponent } from "./tests/tests.component";
 
+// This gets dynamically updated with a redirect to the states with the largest outbreaks.
 const appRoutes: Routes = [
   { path: 'infections', component: InfectionsComponent, pathMatch: 'full' },
   { path: 'growth', component: GrowthRateComponent, pathMatch: 'full' },
