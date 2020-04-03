@@ -9,18 +9,12 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 })
 export class TestsComponent extends GraphsComponent {
   data = [];
-  layout = {
-    autosize: true,
-    height: GraphsComponent.kGraphHeight,
-    margin: GraphsComponent.kGraphMargins,
-    xaxis: {
-      fixedrange: true
-    },
+  layout = Object.assign(this.getBaseLayout(), {
     yaxis: {
       title: 'Negative Tests Per Day (Smoothed)',
       hoverformat: '.0f',
     }
-  };
+  });
 
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);
