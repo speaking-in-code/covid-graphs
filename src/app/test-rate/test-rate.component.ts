@@ -4,8 +4,8 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 
 @Component({
   selector: 'app-test-rate',
-  templateUrl: './test-rate.component.html',
-  styleUrls: ['./test-rate.component.css']
+  templateUrl: '../graphs/graphs.component.html',
+  styleUrls: ['../graphs/graphs.component.css']
 })
 export class TestRateComponent extends GraphsComponent {
   data = [];

@@ -155,7 +155,7 @@ export class StateStats {
   }
 
   private initGrowthRate(builder: StateStatsBuilder): number[] {
-    let rate = Arrays.smoothGrowthRate(this.positives, StateStats.kSmoothingDays);
+    let rate = Arrays.smoothExponentialRate(this.positives, StateStats.kSmoothingDays);
     for (let i = 0; i < rate.length; ++i) {
       if (this.positives[i] < StateStats.kMinPositives) {
         rate[i] = NaN;
@@ -165,11 +165,11 @@ export class StateStats {
   }
 
   private initNegativeTestInfo() {
-    let negativesPerDay = Arrays.smoothIncrease(this.negatives, StateStats.kSmoothingDays);
+    let negativesPerDay = Arrays.smoothLinearRate(this.negatives, StateStats.kSmoothingDays);
     this.debugLog(`negatives: ${this.negatives.join(' ')}`);
     this.debugLog(`negativesPerDay: ${negativesPerDay.join(' ')}`);
     Arrays.copy(negativesPerDay, this.negativeTestsPerDay);
-    let positivesPerDay = Arrays.smoothIncrease(this.positives, StateStats.kSmoothingDays);
+    let positivesPerDay = Arrays.smoothLinearRate(this.positives, StateStats.kSmoothingDays);
     for (let i = 0; i < negativesPerDay.length; ++i) {
       this.smoothedNegativeRate.push(negativesPerDay[i] / (negativesPerDay[i] + positivesPerDay[i]));
     }

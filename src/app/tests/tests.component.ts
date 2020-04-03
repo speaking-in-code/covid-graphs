@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GraphsComponent } from "../graphs/graphs.component";
 import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.service";
 
 @Component({
-  selector: 'app-infection-rate',
+  selector: 'app-tests',
   templateUrl: '../graphs/graphs.component.html',
   styleUrls: ['../graphs/graphs.component.css']
 })
-export class InfectionRateComponent extends GraphsComponent {
+export class TestsComponent extends GraphsComponent {
   data = [];
   layout = {
     autosize: true,
@@ -17,12 +17,7 @@ export class InfectionRateComponent extends GraphsComponent {
       fixedrange: true
     },
     yaxis: {
-      title: 'Infections per Million People',
-      type: 'log',
-      dtick: '',
-      autorange: true,
-      rangemode: 'tozero',
-      fixedrange: true,
+      title: 'Negative Tests Per Day (Smoothed)',
       hoverformat: '.0f',
     }
   };
@@ -35,10 +30,9 @@ export class InfectionRateComponent extends GraphsComponent {
     this.data.length = 0;
     states.states.forEach((stateStats) => {
       this.data.push({
-        x: stateStats.dates, y: stateStats.positivesPerMil, type: 'scatter', mode: 'lines+points',
+        x: stateStats.dates, y: stateStats.negativeTestsPerDay, type: 'scatter', mode: 'lines+points',
         name: stateStats.metadata.code
       });
     });
-    GraphsComponent.logScaleY(this.data, this.layout);
   }
 }

@@ -32,14 +32,14 @@ export class Arrays {
   }
 
   /** Arithmetic mean over array. win is the size of the window to use, with 1 meaning single step. */
-  static smoothIncrease(a: number[], win: number): number[] {
+  static smoothLinearRate(a: number[], win: number): number[] {
     return Arrays.smoothWithFunc(a, win, (prevVal, curVal, steps) => {
       return (curVal - prevVal)/steps;
     });
   }
 
   /** Geometric mean over array, win is the size of the window to use. */
-  static smoothGrowthRate(a: number[], win: number): number[] {
+  static smoothExponentialRate(a: number[], win: number): number[] {
     return Arrays.smoothWithFunc(a, win, (prevVal, curVal, steps) => {
       if (prevVal === 0) return null;
       return Math.pow(curVal/prevVal, 1/steps) - 1.0;

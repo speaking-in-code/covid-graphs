@@ -4,8 +4,8 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 
 @Component({
   selector: 'app-graphs-infections',
-  templateUrl: './infections.component.html',
-  styleUrls: ['./infections.component.css']
+  templateUrl: '../graphs/graphs.component.html',
+  styleUrls: ['../graphs/graphs.component.css']
 })
 export class InfectionsComponent extends GraphsComponent {
   data = [];
