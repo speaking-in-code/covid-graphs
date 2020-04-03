@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from "./app.component";
+import { Router, RouterModule, Routes } from '@angular/router';
+import { CovidTrackerService } from "./covidtracker/covidtracker.service";
 import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
 import { InfectionRateComponent } from "./infection-rate/infection-rate.component";
 import { InfectionsComponent } from "./infections/infections.component";
@@ -9,7 +9,6 @@ import { TestRateComponent } from "./test-rate/test-rate.component";
 import { TestsComponent } from "./tests/tests.component";
 
 const appRoutes: Routes = [
-  { path: '', component: InfectionsComponent, pathMatch: 'full' },
   { path: 'infections', component: InfectionsComponent, pathMatch: 'full' },
   { path: 'growth', component: GrowthRateComponent, pathMatch: 'full' },
   { path: 'infection-rate', component: InfectionRateComponent, pathMatch: 'full' },
@@ -29,4 +28,17 @@ const appRoutes: Routes = [
     RouterModule
   ]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+  // Create a default redirect to the states with the largest outbreaks.
+  constructor(private tracker: CovidTrackerService, private router: Router) {
+    let queryParams = [];
+    tracker.largestOutbreaks.forEach((state: string) => {
+      queryParams.push('id=' + state);
+    });
+    let startingPage = '/infections?' + queryParams.join('&');
+    appRoutes.push({
+      path: '', redirectTo: startingPage, pathMatch: 'full'
+    });
+    router.resetConfig(appRoutes);
+  }
+}
