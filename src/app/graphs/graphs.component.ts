@@ -1,5 +1,6 @@
 import { OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
+import { StateStats } from "../covidtracker/covidtracker.service";
 import { Arrays } from "./arrays";
 import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.service";
 
@@ -7,6 +8,9 @@ import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.se
  * Parent class for graphs that respond to state selection changes.
  */
 export abstract class GraphsComponent implements OnInit, OnDestroy {
+  data = [];
+  layout: any = {};
+
   private subscription: Subscription;
 
   /**
@@ -53,16 +57,29 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
     }
   }
 
-  abstract drawStates(states: ChosenStates): void;
+  abstract getDataForState(state: StateStats): number[];
+
+  drawStates(states: ChosenStates): void {
+    this.data.length = 0;
+    states.states.forEach((stateStats) => {
+      let yvalues = this.getDataForState(stateStats);
+      this.data.push({
+        x: stateStats.dates, y: yvalues, type: 'scatter', mode: 'lines+points', name: stateStats.metadata.code
+      });
+    });
+    if (this.layout.yaxis.type === 'log') {
+      this.logScaleY();
+    }
+  }
 
   /**
    * Tweaks the Y axis so it renders well for log-scaled graphs
    * - setting specific ticks that are more readable (1, 2, 5, 10, 20, ...)
    * - replacing 0 points with null, so they don't freak out on the log graph.
    */
-  static logScaleY(data, layout): void {
+  private logScaleY(): void {
     let max = 0;
-    for (let line of data) {
+    for (let line of this.data) {
       for (let i = 0; i < line.y.length; ++i) {
         max = Math.max(max, line.y[i]);
         if (line.y[i] === 0) {
@@ -80,7 +97,7 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
       tickvals.push(5 * multiplier);
       multiplier *= 10;
     }
-    layout.yaxis.tickvals = tickvals;
-    layout.yaxis.range = [0, Math.log10(Arrays.last(tickvals))];
+    this.layout.yaxis.tickvals = tickvals;
+    this.layout.yaxis.range = [0, Math.log10(Arrays.last(tickvals))];
   }
 }

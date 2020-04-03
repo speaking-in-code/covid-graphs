@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StateStats } from "../covidtracker/covidtracker.service";
 import { GraphsComponent } from "../graphs/graphs.component";
 import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.service";
 
@@ -8,7 +9,6 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
   styleUrls: ['../graphs/graphs.component.css']
 })
 export class TestRateComponent extends GraphsComponent {
-  data = [];
   layout = Object.assign(this.getBaseLayout(), {
     yaxis: {
       title: 'Negative Test Rate (smoothed)',
@@ -21,13 +21,7 @@ export class TestRateComponent extends GraphsComponent {
     super(prefsObserver);
   }
 
-  drawStates(states: ChosenStates) {
-    this.data.length = 0;
-    states.states.forEach((stateStats) => {
-      this.data.push({
-        x: stateStats.dates, y: stateStats.smoothedNegativeRate, type: 'scatter', mode: 'lines+points',
-        name: stateStats.metadata.code
-      });
-    });
+  getDataForState(state: StateStats): number[] {
+    return state.smoothedNegativeRate;
   }
 }

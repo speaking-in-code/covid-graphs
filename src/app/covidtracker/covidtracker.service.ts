@@ -113,7 +113,7 @@ export class StateStats {
   private static readonly kSmoothingDays = 7;
 
   // Minimum number of positives before calculating growth rates.
-  private static readonly kMinPositives = 100;
+  private static readonly kMinPositives = 10;
 
   constructor(builder: StateStatsBuilder) {
     this.metadata = builder.metadata;

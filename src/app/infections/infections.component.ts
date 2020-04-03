@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StateStats } from "../covidtracker/covidtracker.service";
 import { GraphsComponent } from '../graphs/graphs.component';
 import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.service";
 
@@ -8,7 +9,6 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
   styleUrls: ['../graphs/graphs.component.css']
 })
 export class InfectionsComponent extends GraphsComponent {
-  data = [];
   layout = Object.assign(this.getBaseLayout(), {
     yaxis: {
       title: 'Infections',
@@ -20,14 +20,7 @@ export class InfectionsComponent extends GraphsComponent {
     super(prefsObserver);
   }
 
-  drawStates(states: ChosenStates) {
-    this.data.length = 0;
-    states.states.forEach((stateStats) => {
-      this.data.push({
-        x: stateStats.dates, y: stateStats.positives, type: 'scatter', mode: 'lines+points',
-        name: stateStats.metadata.code
-      });
-    });
-    GraphsComponent.logScaleY(this.data, this.layout);
+  getDataForState(state: StateStats): number[] {
+    return state.positives;
   }
 }
