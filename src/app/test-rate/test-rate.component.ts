@@ -9,20 +9,13 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 })
 export class TestRateComponent extends GraphsComponent {
   data = [];
-  layout = {
-    autosize: true,
-    height: GraphsComponent.kGraphHeight,
-    margin: GraphsComponent.kGraphMargins,
-    xaxis: {
-      fixedrange: true
-    },
+  layout = Object.assign(this.getBaseLayout(), {
     yaxis: {
       title: 'Negative Test Rate (smoothed)',
       tickformat: '%',
-      fixedrange: true,
       range: [0, 1],
     }
-  };
+  });
 
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);

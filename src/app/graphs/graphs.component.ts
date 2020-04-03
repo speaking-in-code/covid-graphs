@@ -24,6 +24,23 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
     ]
   };
 
+  protected getBaseLayout() {
+    return {
+      // Autosize set to true is a good idea for horizontal, but triggers bugs with vertical sizing. (Graph relayout
+      // will alternate between setting svg-container height to a fixed pixel value (which works) and 100% (which
+      // causes layout problems.
+      autosize: true,
+      height: 450,
+      margin: { t: 20, pad: 0 },
+      xaxis: {
+        fixedrange: true
+      },
+      yaxis: {
+        fixedrange: true
+      },
+    }
+  }
+
   protected constructor(private prefsObserver: PrefsObserver) {}
 
   ngOnInit(): void {
@@ -37,11 +54,6 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
   }
 
   abstract drawStates(states: ChosenStates): void;
-
-  // Height of graph in pixels. See comments in infections.ts about why this is fixed.
-  protected static kGraphHeight = 450;
-
-  protected static kGraphMargins = { t: 20, pad: 0 };
 
   /**
    * Tweaks the Y axis so it renders well for log-scaled graphs

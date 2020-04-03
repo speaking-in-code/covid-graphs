@@ -9,21 +9,14 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 })
 export class GrowthRateComponent extends GraphsComponent {
   data = [];
-  layout = {
-    autosize: true,
-    height: GraphsComponent.kGraphHeight,
-    margin: GraphsComponent.kGraphMargins,
+  layout = Object.assign(this.getBaseLayout(), {
     automargin: true,
-    xaxis: {
-      fixedrange: true,
-    },
     yaxis: {
       title: 'Growth Rate (smoothed)',
       tickformat: '%',
-      fixedrange: true,
       rangemode: 'tozero',
     }
-  };
+  });
 
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);

@@ -9,23 +9,16 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
 })
 export class InfectionRateComponent extends GraphsComponent {
   data = [];
-  layout = {
-    autosize: true,
-    height: GraphsComponent.kGraphHeight,
-    margin: GraphsComponent.kGraphMargins,
-    xaxis: {
-      fixedrange: true
-    },
+  layout = Object.assign(this.getBaseLayout(), {
     yaxis: {
       title: 'Infections per Million People',
       type: 'log',
       dtick: '',
       autorange: true,
       rangemode: 'tozero',
-      fixedrange: true,
       hoverformat: '.0f',
     }
-  };
+  });
 
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);

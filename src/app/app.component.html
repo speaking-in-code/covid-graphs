@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="toolbar mat-elevation-z6">
+<mat-toolbar color="primary" class="toolbar mat-elevation-z6" xmlns="http://www.w3.org/1999/html">
   <h1 class="app-name">US Coronavirus Spread</h1>
 </mat-toolbar>
 <mat-accordion>
@@ -21,6 +21,7 @@
   </a>
 </nav>
 <router-outlet></router-outlet>
-<mat-card>
-Data from <a href="https://covidtracking.com/">The Covid Tracking Project</a>
-</mat-card>
+<mat-toolbar color="primary" class="toolbar mat-elevation-z6">
+  Data credit:
+  <a target="_blank" style="color: white; margin-left: 10px" href="https://covidtracking.com/">The Covid Tracking Project</a>
+</mat-toolbar>
