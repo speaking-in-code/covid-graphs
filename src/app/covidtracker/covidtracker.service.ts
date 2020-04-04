@@ -119,6 +119,8 @@ export class StateStats {
   // How many negative tests were run each day?
   readonly negativeTestsPerDay: number[] = [];
 
+  readonly smoothedTestsPerPositive: number[] = [];
+
   // Smooth data over one week.
   private static readonly kSmoothingDays = 7;
 
@@ -188,7 +190,9 @@ export class StateStats {
     this.debugLog(`negativesPerDay: ${negativesPerDay.join(' ')}`);
     Arrays.copy(negativesPerDay, this.negativeTestsPerDay);
     for (let i = 0; i < negativesPerDay.length; ++i) {
-      this.smoothedNegativeRate.push(negativesPerDay[i] / (negativesPerDay[i] + this.smoothedDailyInfections[i]));
+      let tests = (negativesPerDay[i] + this.smoothedDailyInfections[i]);
+      this.smoothedNegativeRate.push(negativesPerDay[i] / tests);
+      this.smoothedTestsPerPositive.push(tests/this.smoothedDailyInfections[i]);
     }
   }
 
