@@ -3,20 +3,9 @@
   <h1 class="app-name">US Coronavirus Comparison</h1>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav #snav mode="'over'" fixedInViewport="true" fixedTopGap="56">
+  <mat-sidenav #snav mode="'over'" fixedInViewport="true" fixedTopGap="56" class="sidenav">
     <app-graphs-selector></app-graphs-selector>
   </mat-sidenav>
-
-  <!--
-<mat-accordion>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>States</mat-panel-title>
-      <mat-panel-description>{{states}}</mat-panel-description>
-    </mat-expansion-panel-header>
-  </mat-expansion-panel>
-</mat-accordion>
-  -->
   <mat-sidenav-content>
     <nav mat-tab-nav-bar>
       <a mat-tab-link

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { CovidTrackerService, StateStats } from "../covidtracker/covidtracker.service";
+import { CovidTrackerService } from "../covidtracker/covidtracker.service";
 import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.service";
 
 
@@ -9,13 +9,14 @@ interface Selection {
   // Logical ID.
   id: string;
   // User visible name of option.
-  name: string;
+  title: string;
+
+  bolded?: boolean;
 }
 
-interface Chip {
-  label: string;
-  selected: boolean;
-  readonly selection: Set<string>
+interface Prefill {
+  title: string;
+  states: string[];
 }
 
 @Component({
@@ -24,36 +25,16 @@ interface Chip {
   styleUrls: ['./selector.component.css']
 })
 export class SelectorComponent implements OnInit {
-  availableStates: Selection[] = [];
-  selectedStates: Selection[] = [];
+  available: Selection[] = [];
+  selectedStates: string[] = [];
 
-  chips: Chip[] = [
-    {
-      label: 'Largest Outbreaks',
-      selected: false,
-      selection: new Set(this.tracker.largestOutbreaks)
-    },
-    {
-      label: 'Highest Infection Rates',
-      selected: false,
-      selection: new Set(this.tracker.largestInfectionRates)
-    },
-    {
-      label: 'Fastest Growth',
-      selected: false,
-      selection: new Set(this.tracker.fastestGrowth)
-    },
-    {
-      label: 'Most Testing',
-      selected: false,
-      selection: new Set(this.tracker.mostTesting)
-    },
-    {
-      label: 'Most Deaths',
-      selected: false,
-      selection: new Set(this.tracker.mostDeaths)
-    },
-  ];
+  private prefills = new Map<string, Prefill>([
+    ['largestOutbreaks', { title: 'Largest Outbreaks', states: this.tracker.largestOutbreaks }],
+    ['largestInfectionRates', { title: 'Highest Infection Rates', states: this.tracker.largestInfectionRates }],
+    ['fastestGrowth', { title: 'Fastest Growth', states: this.tracker.fastestGrowth }],
+    ['mostTesting', { title: 'Most Testing', states: this.tracker.mostTesting }],
+    ['mostDeaths', { title: 'Most Deaths', states: this.tracker.mostDeaths }],
+  ]);
 
   constructor(
     private tracker: CovidTrackerService,
@@ -62,46 +43,40 @@ export class SelectorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let states = Array.from(this.tracker.states.stateMap.keys()).sort();
-    states.forEach((state) => {
-      this.availableStates.push(this.statsToSelection(
-        this.tracker.getStats(state)));
+    this.prefills.forEach((value, key) => {
+      this.available.push({
+        id: key,
+        title: value.title,
+        bolded: true
+      });
+    });
+    Array.from(this.tracker.states.stateMap.keys()).sort().forEach((postalCode) => {
+      let state = this.tracker.getStats(postalCode);
+      this.available.push({
+        id: postalCode,
+        title: `${state.metadata.name} [${state.metadata.code}]`
+      });
     });
     this.prefsObserver.chosenStates().subscribe((this.onChosenStatesChange.bind(this)));
-  }
-
-
-  /**
-   * Called when a user selects/unselects the chips.
-   */
-  onStatesChipClick(chip: Chip) {
-    if (!chip.selected) {
-      // States currently off, flip on.
-      let toAdd = new Set(chip.selection);
-      this.selectedStates.forEach((selection) => {
-        toAdd.delete(selection.id);
-      });
-      toAdd.forEach((remaining) => {
-        this.selectedStates.push(this.postalCodeToSelection(remaining));
-      })
-    } else {
-      // States currenlty on, flip them off.
-      this.selectedStates = this.selectedStates.filter((selection: Selection) => {
-        return !chip.selection.has(selection.id);
-      });
-    }
-    this.onStatesSelectedChange();
   }
 
   /**
    * Called when user updates selection widget.
    */
   onStatesSelectedChange(): void {
-    let ids = [];
-    this.selectedStates.forEach((selection) => {
-      ids.push(selection.id);
+    // Remove duplicates
+    let ids = new Set<string>();
+    this.selectedStates.forEach((id) => {
+      let prefill = this.prefills.get(id);
+      if (prefill) {
+        prefill.states.forEach((postalCode) => {
+          ids.add(postalCode);
+        });
+      } else {
+        ids.add(id);
+      }
     });
-    this.gotoStates(ids);
+    this.gotoStates(Array.from(ids));
   }
 
   // this updates the URL, which triggers onChosenStatesChange
@@ -113,36 +88,12 @@ export class SelectorComponent implements OnInit {
    * Called when query params in URL are changed.
    */
   private onChosenStatesChange(states: ChosenStates) {
+    let postalCodes = new Set<string>();
+    states.states.forEach((state) => {
+      postalCodes.add(state.metadata.code);
+    });
     // ng-select change detection is subtle, see https://github.com/ng-select/ng-select/blob/master/README.md note on
     // Change Detection.
-    this.selectedStates = [];
-    states.states.forEach((state) => this.selectedStates.push(this.statsToSelection(state)));
-    this.syncChips();
-  }
-
-  private syncChips(): void {
-    this.chips.forEach((chip) => {
-      let toMatch = new Set<string>(chip.selection);
-      let count = 0;
-      this.selectedStates.forEach((selection) => {
-        toMatch.delete(selection.id)
-      });
-      chip.selected = toMatch.size === 0;
-    });
-  }
-
-  private selectionToStats(selection: Selection): StateStats {
-    return this.tracker.getStats(selection.id);
-  }
-
-  private postalCodeToSelection(postalCode: string): Selection {
-    return this.statsToSelection(this.tracker.getStats(postalCode));
-  }
-
-  private statsToSelection(state: StateStats): Selection {
-    return {
-      id: state.metadata.code,
-      name: `${state.metadata.name} [${state.metadata.code}]`
-    };
+    this.selectedStates = Array.from(postalCodes);
   }
 }
