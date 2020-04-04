@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { CovidTrackerService } from "./covidtracker/covidtracker.service";
+import { DeathsComponent } from "./deaths/deaths.component";
 import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
 import { InfectionRateComponent } from "./infection-rate/infection-rate.component";
 import { InfectionsComponent } from "./infections/infections.component";
@@ -11,6 +12,7 @@ import { TestsComponent } from "./tests/tests.component";
 // This gets dynamically updated with a redirect to the states with the largest outbreaks.
 const appRoutes: Routes = [
   { path: 'infections', component: InfectionsComponent, pathMatch: 'full' },
+  { path: 'deaths', component: DeathsComponent, pathMatch: 'full' },
   { path: 'growth', component: GrowthRateComponent, pathMatch: 'full' },
   { path: 'infection-rate', component: InfectionRateComponent, pathMatch: 'full' },
   { path: 'tests', component: TestsComponent, pathMatch: 'full' },

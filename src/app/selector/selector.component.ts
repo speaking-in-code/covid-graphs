@@ -48,6 +48,11 @@ export class SelectorComponent implements OnInit {
       selected: false,
       selection: new Set(this.tracker.mostTesting)
     },
+    {
+      label: 'Most Deaths',
+      selected: false,
+      selection: new Set(this.tracker.mostDeaths)
+    },
   ];
 
   constructor(

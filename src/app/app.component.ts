@@ -14,6 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   navLinks = [
     { path: 'infections', label: 'Infections'},
+    { path: 'deaths', label: 'Deaths'},
     { path: 'growth', label: 'Growth Rates' },
     { path: 'infection-rate', label: 'Infections Per Million'},
     { path: 'tests', label: 'Negative Tests'},

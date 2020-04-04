@@ -16,6 +16,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { PlotlyViaWindowModule } from "angular-plotly.js";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DeathsComponent } from "./deaths/deaths.component";
 import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
 import { InfectionsComponent } from "./infections/infections.component";
 import { SelectorComponent } from "./selector/selector.component";
@@ -44,6 +45,7 @@ import { TestsComponent } from './tests/tests.component';
     ],
   declarations: [
     AppComponent,
+    DeathsComponent,
     GrowthRateComponent,
     InfectionsComponent,
     SelectorComponent,

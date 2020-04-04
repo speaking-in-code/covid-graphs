@@ -31,12 +31,14 @@ export class DailyStats {
   readonly date: Date;
   readonly positive: number;
   readonly negative: number;
+  readonly death: number;
   readonly state_code: string;
 
   constructor(obj: any) {
     this.date = DailyStats.parseDate(obj.date);
     this.positive = DailyStats.ensureNumber(obj.positive);
     this.negative = DailyStats.ensureNumber(obj.negative);
+    this.death = DailyStats.ensureNumber(obj.death);
     this.state_code = obj.state;
   }
 
@@ -97,6 +99,9 @@ export class StateStats {
   // Total negatives in the state.
   readonly negatives: number[] = [];
 
+  // Total deaths in the state.
+  readonly deaths: number[] = [];
+
   // Positives per million people
   readonly positivesPerMil: number[];
 
@@ -133,9 +138,11 @@ export class StateStats {
       this.dates.push(day.date);
       this.positives.push(day.positive);
       this.negatives.push(day.negative);
+      this.deaths.push(day.death);
     }
     StateStats.ensureNonDecreasing(this.positives);
     StateStats.ensureNonDecreasing(this.negatives);
+    StateStats.ensureNonDecreasing(this.deaths);
   }
 
   private static ensureNonDecreasing(array: number[]) {
@@ -228,6 +235,9 @@ export class CovidTrackerService {
   /** States with the most testing, top 5. */
   readonly mostTesting: string[];
 
+  /** States with the most deaths, top 5. */
+  readonly mostDeaths: string[];
+
   private stats = new Map<string, StateStats>();
   private debugTopK: boolean;
   private static kSummarySize = 5;
@@ -270,6 +280,9 @@ export class CovidTrackerService {
     this.mostTesting = this.topK('most testing',
       (state) => true,
       (state) => state.negativeTestsPerDay);
+    this.mostDeaths = this.topK('most deaths',
+        (state) => true,
+        (state) => state.deaths);
   }
 
   getStats(postalCode: string): StateStats {
