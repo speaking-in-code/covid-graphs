@@ -13,7 +13,8 @@ export class AppComponent implements OnInit, OnDestroy {
   states = '';
 
   navLinks = [
-    { path: 'infections', label: 'Infections'},
+    { path: 'infections', label: 'Total Infections'},
+    { path: 'daily-infections', label: 'Daily Infections'},
     { path: 'deaths', label: 'Deaths'},
     { path: 'growth', label: 'Growth Rates' },
     { path: 'infection-rate', label: 'Infections Per Million'},

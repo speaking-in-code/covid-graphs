@@ -30,6 +30,7 @@ export class StateMetadata {
 export class DailyStats {
   readonly date: Date;
   readonly positive: number;
+  readonly positiveIncrease: number;
   readonly negative: number;
   readonly death: number;
   readonly state_code: string;
@@ -37,6 +38,7 @@ export class DailyStats {
   constructor(obj: any) {
     this.date = DailyStats.parseDate(obj.date);
     this.positive = DailyStats.ensureNumber(obj.positive);
+    this.positiveIncrease = DailyStats.ensureNumber(obj.positiveIncrease);
     this.negative = DailyStats.ensureNumber(obj.negative);
     this.death = DailyStats.ensureNumber(obj.death);
     this.state_code = obj.state;
@@ -105,6 +107,9 @@ export class StateStats {
   // Positives per million people
   readonly positivesPerMil: number[];
 
+  // Positive diagnoses per day
+  readonly smoothedDailyInfections: number[];
+
   // Daily growth rate.
   readonly smoothedGrowthRate: number[];
 
@@ -123,6 +128,7 @@ export class StateStats {
   constructor(builder: StateStatsBuilder) {
     this.metadata = builder.metadata;
     this.initDates(builder);
+    this.smoothedDailyInfections = this.initDailyInfections();
     this.positivesPerMil = this.initInfectionRate(builder);
     this.smoothedGrowthRate = this.initGrowthRate(builder);
     this.initNegativeTestInfo();
@@ -137,6 +143,7 @@ export class StateStats {
     for (const day of builder.daily) {
       this.dates.push(day.date);
       this.positives.push(day.positive);
+      // this.positivesPerDay.push(day.positiveIncrease);
       this.negatives.push(day.negative);
       this.deaths.push(day.death);
     }
@@ -171,19 +178,22 @@ export class StateStats {
     return rate;
   }
 
+  private initDailyInfections(): number[] {
+    return Arrays.smoothLinearRate(this.positives, StateStats.kSmoothingDays);
+  }
+
   private initNegativeTestInfo() {
     let negativesPerDay = Arrays.smoothLinearRate(this.negatives, StateStats.kSmoothingDays);
     this.debugLog(`negatives: ${this.negatives.join(' ')}`);
     this.debugLog(`negativesPerDay: ${negativesPerDay.join(' ')}`);
     Arrays.copy(negativesPerDay, this.negativeTestsPerDay);
-    let positivesPerDay = Arrays.smoothLinearRate(this.positives, StateStats.kSmoothingDays);
     for (let i = 0; i < negativesPerDay.length; ++i) {
-      this.smoothedNegativeRate.push(negativesPerDay[i] / (negativesPerDay[i] + positivesPerDay[i]));
+      this.smoothedNegativeRate.push(negativesPerDay[i] / (negativesPerDay[i] + this.smoothedDailyInfections[i]));
     }
   }
 
   private debugLog(str: string) {
-    if (this.metadata.code === 'none') {
+    if (this.metadata.code === 'CA') {
       console.log(str);
     }
   }
