@@ -1,8 +1,9 @@
-<ng-select [items]="availableStates"
-           appearance="outline"
-           bindLabel="name" placeholder="Select States"
-           appendTo="body" multiple="true" [(ngModel)]="selectedStates"
-           (change)="onStatesSelectedChange()" ></ng-select>
+<ng-select (change)="onStatesSelectedChange()"
+           [(ngModel)]="selectedStates"
+           [items]="availableStates"
+           appearance="outline" appendTo="body"
+           bindLabel="name" multiple="true"
+           placeholder="Select States"></ng-select>
 <!-- Not 100% confident of UX pattern here. Ended up deciding that selecting a chip puts the
 specified states in the search bar, and that unselecting them removes those states. That gets
 a little weird when users have overlapping selections. -->

@@ -1,26 +1,36 @@
 <mat-toolbar color="primary" class="toolbar mat-elevation-z6" xmlns="http://www.w3.org/1999/html">
+  <mat-icon (click)="snav.toggle()">menu</mat-icon>
   <h1 class="app-name">US Coronavirus Comparison</h1>
 </mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #snav mode="'over'" fixedInViewport="true" fixedTopGap="56">
+    <app-graphs-selector></app-graphs-selector>
+  </mat-sidenav>
+
+  <!--
 <mat-accordion>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>States</mat-panel-title>
       <mat-panel-description>{{states}}</mat-panel-description>
     </mat-expansion-panel-header>
-    <app-graphs-selector></app-graphs-selector>
   </mat-expansion-panel>
 </mat-accordion>
-<nav mat-tab-nav-bar>
-  <a mat-tab-link
-     *ngFor="let link of navLinks"
-     [routerLink]="link.path"
-     queryParamsHandling="preserve"
-     routerLinkActive #rla="routerLinkActive"
-     [active]="rla.isActive">
-    {{link.label}}
-  </a>
-</nav>
-<router-outlet></router-outlet>
+  -->
+  <mat-sidenav-content>
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of navLinks"
+         [routerLink]="link.path"
+         queryParamsHandling="preserve"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 <mat-toolbar color="primary" class="toolbar mat-elevation-z6">
   Data credit:
   <a target="_blank" style="color: white; margin-left: 10px" href="https://covidtracking.com/">The Covid Tracking Project</a>

@@ -6,6 +6,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatListModule } from '@angular/material/list';
@@ -23,23 +24,24 @@ import { TestRateComponent } from './test-rate/test-rate.component';
 import { TestsComponent } from './tests/tests.component';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    CommonModule,
-    FormsModule,
-    MatChipsModule,
-    MatIconModule,
-    MatListModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatTabsModule,
-    MatExpansionModule,
-    MatCardModule,
-    NgSelectModule,
-    PlotlyViaWindowModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        CommonModule,
+        FormsModule,
+        MatChipsModule,
+        MatIconModule,
+        MatListModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatTabsModule,
+        MatExpansionModule,
+        MatCardModule,
+        NgSelectModule,
+        PlotlyViaWindowModule,
+        MatSidenavModule,
+    ],
   declarations: [
     AppComponent,
     GrowthRateComponent,
