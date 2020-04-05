@@ -58,9 +58,12 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Create the layout to use. Use getBaseLayout as a the base.
+  // Create the layout to use. Use getBaseLayout as the base. NB: this used to be implemented as subclass access to
+  // the layout object. That doesn't work because plotly modifies data and layout during rendering. In order for
+  // changes to work consistently and cleanly, we start with a new copy of layout and data for each render.
   abstract createLayout(): any;
 
+  // Return the data to graph for the given state.
   abstract getDataForState(state: StateStats): number[];
 
   onXStyleChange() {
@@ -68,20 +71,17 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
   }
 
   private onChosenStatesChange(chosenStates: ChosenStates): void {
-    console.log(`onChosenStatesChanged`);
     this.chosenStates = chosenStates;
     this.redrawPlots();
   }
 
   private redrawPlots(): void {
-    console.log(`redrawPlots invoked`);
     this.layout = this.createLayout();
     this.data = [];
     this.chosenStates.states.forEach((stateStats) => {
       let line: any = {type: 'scatter', mode: 'lines+points', name: stateStats.metadata.code};
       if (this.chosenStates.xstyle === 'critical') {
         line.x = stateStats.offsetDays;
-        console.log(`${stateStats.metadata.code} offset=${stateStats.offsetCount}, x is ${line.x.join(' ')}`);
         line.y = this.getDataForState(stateStats).slice(stateStats.offsetCount);
       } else {
         line.x = stateStats.dates;
