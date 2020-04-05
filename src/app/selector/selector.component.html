@@ -7,17 +7,17 @@
 </mat-card>
 
 <mat-card>
-  <ng-select [items]="available"
-             (change)="onStatesSelectedChange()"
+  <ng-select (change)="onStatesSelectedChange()"
              [(ngModel)]="selectedStates"
+             [items]="available"
              bindLabel="title"
              bindValue="id"
              groupBy="states"
              markFirst=false
+             multiple=true
              placeholder="Select States"
-             selectableGroupAsModel=true
              selectableGroup=true
-             multiple=true>
+             selectableGroupAsModel=true>
     <ng-template ng-option-tmp let-item="item">
       <span *ngIf="item.bolded; then boldBlock else plainBlock"></span>
       <ng-template #boldBlock><b>{{item.title}}</b></ng-template>
