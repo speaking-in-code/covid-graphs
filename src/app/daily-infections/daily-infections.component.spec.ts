@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { GraphsFixture } from "../graphs/graphs-fixture";
 
 import { DailyInfectionsComponent } from './daily-infections.component';
 
@@ -7,10 +8,13 @@ describe('DailyInfectionsComponent', () => {
   let fixture: ComponentFixture<DailyInfectionsComponent>;
 
   beforeEach(async(() => {
+    TestBed.configureTestingModule(GraphsFixture.getModule())
     TestBed.configureTestingModule({
-      declarations: [ DailyInfectionsComponent ]
-    })
-    .compileComponents();
+      declarations: [
+        DailyInfectionsComponent,
+      ],
+    });
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {

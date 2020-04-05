@@ -21,10 +21,10 @@ describe('CovidTrackerService', () => {
     expect(ca.positives[1]).toEqual(53);
     expect(ca.positives[2]).toEqual(60);
     expect(ca.positives[3]).toEqual(69);
-    expect(ca.smoothedGrowthRate[0]).toEqual(NaN);
-    expect(ca.smoothedGrowthRate[1]).toEqual(NaN);
+    expect(ca.smoothedGrowthRate[0]).toBeNaN();
+    expect(ca.smoothedGrowthRate[1]).toEqual(0);
     expect(ca.smoothedGrowthRate[2]).toBeCloseTo(0.06399);
-    expect(ca.smoothedGrowthRate[3]).toBeCloseTo(0.14100);
+    expect(ca.smoothedGrowthRate[3]).toBeCloseTo(0.09192);
   });
 
   let fakeData = [

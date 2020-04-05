@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { GraphsFixture } from "../graphs/graphs-fixture";
 
 import { TestRateComponent } from './test-rate.component';
 
@@ -7,6 +8,7 @@ describe('TestRateComponent', () => {
   let fixture: ComponentFixture<TestRateComponent>;
 
   beforeEach(async(() => {
+    TestBed.configureTestingModule(GraphsFixture.getModule());
     TestBed.configureTestingModule({
       declarations: [ TestRateComponent ]
     })
