@@ -9,16 +9,18 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
   styleUrls: ['../graphs/graphs.component.css']
 })
 export class TestRateComponent extends GraphsComponent {
-  layout = Object.assign(this.getBaseLayout(), {
-    yaxis: {
-      title: 'Negative Test Rate (smoothed)',
-      tickformat: '%',
-      range: [0, 1],
-    }
-  });
-
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);
+  }
+
+  createLayout(): any {
+    return Object.assign(this.getBaseLayout(), {
+      yaxis: {
+        title: 'Negative Test Rate (smoothed)',
+        tickformat: '%',
+        range: [0, 1],
+      }
+    });
   }
 
   getDataForState(state: StateStats): number[] {

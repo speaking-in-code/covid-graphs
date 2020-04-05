@@ -1,18 +1,27 @@
-<ng-select [items]="available"
-           (change)="onStatesSelectedChange()"
-           [(ngModel)]="selectedStates"
-           bindLabel="title"
-           bindValue="id"
-           groupBy="states"
-           markFirst=false
-           isOpen=true
-           placeholder="Select States"
-           selectableGroupAsModel=true
-           selectableGroup=true
-           multiple=true>
-  <ng-template ng-option-tmp let-item="item">
-    <span *ngIf="item.bolded; then boldBlock else plainBlock"></span>
-    <ng-template #boldBlock><b>{{item.title}}</b></ng-template>
-    <ng-template #plainBlock>{{item.title}}</ng-template>
-  </ng-template>
-</ng-select>
+<mat-card>
+  <label id="xstyle-label">X-Axis</label>
+  <mat-radio-group (change)="onXStyleChange()" aria-labelledby="xstyle-label" [(ngModel)]="xstyle">
+    <mat-radio-button value="date">By Date</mat-radio-button>
+    <mat-radio-button value="critical">Since Critical Mass</mat-radio-button>
+  </mat-radio-group>
+</mat-card>
+
+<mat-card>
+  <ng-select [items]="available"
+             (change)="onStatesSelectedChange()"
+             [(ngModel)]="selectedStates"
+             bindLabel="title"
+             bindValue="id"
+             groupBy="states"
+             markFirst=false
+             placeholder="Select States"
+             selectableGroupAsModel=true
+             selectableGroup=true
+             multiple=true>
+    <ng-template ng-option-tmp let-item="item">
+      <span *ngIf="item.bolded; then boldBlock else plainBlock"></span>
+      <ng-template #boldBlock><b>{{item.title}}</b></ng-template>
+      <ng-template #plainBlock>{{item.title}}</ng-template>
+    </ng-template>
+  </ng-select>
+</mat-card>

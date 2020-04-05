@@ -9,16 +9,18 @@ import { PrefsObserver } from "../prefs-observer/prefs-observer.service";
   styleUrls: ['../graphs/graphs.component.css']
 })
 export class TestsPerPositiveComponent extends GraphsComponent {
-  layout = Object.assign(this.getBaseLayout(), {
-    yaxis: {
-      title: 'Tests Per Positive (smoothed)',
-      rangemode: 'tozero',
-      hoverformat: '.1f',
-    }
-  });
-
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);
+  }
+
+  createLayout(): any {
+    return Object.assign(this.getBaseLayout(), {
+      yaxis: {
+        title: 'Tests Per Positive (smoothed)',
+        rangemode: 'tozero',
+        hoverformat: '.1f',
+      }
+    });
   }
 
   getDataForState(state: StateStats): number[] {

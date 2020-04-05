@@ -8,10 +8,11 @@ import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.se
  * Parent class for graphs that respond to state selection changes.
  */
 export abstract class GraphsComponent implements OnInit, OnDestroy {
-  data = [];
-  layout: any = {};
+  data: any;
+  layout: any;
 
   private subscription: Subscription;
+  private chosenStates: ChosenStates;
 
   /**
    * Reasonable defaults for plotly.
@@ -48,7 +49,7 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
   protected constructor(private prefsObserver: PrefsObserver) {}
 
   ngOnInit(): void {
-    this.subscription = this.prefsObserver.chosenStates().subscribe(this.drawStates.bind(this));
+    this.prefsObserver.chosenStates().subscribe(this.onChosenStatesChange.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -57,18 +58,42 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Create the layout to use. Use getBaseLayout as a the base.
+  abstract createLayout(): any;
+
   abstract getDataForState(state: StateStats): number[];
 
-  drawStates(states: ChosenStates): void {
-    this.data.length = 0;
-    states.states.forEach((stateStats) => {
-      let yvalues = this.getDataForState(stateStats);
-      this.data.push({
-        x: stateStats.dates, y: yvalues, type: 'scatter', mode: 'lines+points', name: stateStats.metadata.code
-      });
+  onXStyleChange() {
+    this.redrawPlots();
+  }
+
+  private onChosenStatesChange(chosenStates: ChosenStates): void {
+    console.log(`onChosenStatesChanged`);
+    this.chosenStates = chosenStates;
+    this.redrawPlots();
+  }
+
+  private redrawPlots(): void {
+    console.log(`redrawPlots invoked`);
+    this.layout = this.createLayout();
+    this.data = [];
+    this.chosenStates.states.forEach((stateStats) => {
+      let line: any = {type: 'scatter', mode: 'lines+points', name: stateStats.metadata.code};
+      if (this.chosenStates.xstyle === 'critical') {
+        line.x = stateStats.offsetDays;
+        console.log(`${stateStats.metadata.code} offset=${stateStats.offsetCount}, x is ${line.x.join(' ')}`);
+        line.y = this.getDataForState(stateStats).slice(stateStats.offsetCount);
+      } else {
+        line.x = stateStats.dates;
+        line.y = this.getDataForState(stateStats);
+      }
+      this.data.push(line);
     });
     if (this.layout.yaxis.type === 'log') {
       this.logScaleY();
+    }
+    if (this.chosenStates.xstyle === 'critical') {
+      this.layout.xaxis.title = 'Days Since 1 Person Per Million Infected';
     }
   }
 

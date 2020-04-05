@@ -95,6 +95,9 @@ export class StateStats {
   // Dates for which we have data, parallel array with others below.
   readonly dates: Date[] = [];
 
+  readonly offsetDays = [];
+  readonly offsetCount: number;
+
   // Total positives in the state
   readonly positives: number[] = [];
 
@@ -127,6 +130,8 @@ export class StateStats {
   // Minimum number of positives before calculating growth rates.
   private static readonly kMinPositives = 10;
 
+  private static readonly kInfectionsForOffset = 100;
+
   constructor(builder: StateStatsBuilder) {
     this.metadata = builder.metadata;
     this.initDates(builder);
@@ -134,6 +139,14 @@ export class StateStats {
     this.positivesPerMil = this.initInfectionRate(builder);
     this.smoothedGrowthRate = this.initGrowthRate(builder);
     this.initNegativeTestInfo();
+    for (this.offsetCount = 0; this.offsetCount < this.dates.length; ++this.offsetCount) {
+      if (this.positivesPerMil[this.offsetCount] >= 1) {
+        break;
+      }
+    }
+    for (let i = this.offsetCount; i < this.dates.length; ++i) {
+      this.offsetDays.push(i - this.offsetCount);
+    }
   }
 
   private initDates(builder: StateStatsBuilder) {

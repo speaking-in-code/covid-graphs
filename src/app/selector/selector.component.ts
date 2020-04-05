@@ -27,6 +27,7 @@ interface Prefill {
 export class SelectorComponent implements OnInit {
   available: Selection[] = [];
   selectedStates: string[] = [];
+  xstyle = 'date';
 
   private prefills = new Map<string, Prefill>([
     ['largestOutbreaks', { title: 'Largest Outbreaks', states: this.tracker.largestOutbreaks }],
@@ -79,9 +80,13 @@ export class SelectorComponent implements OnInit {
     this.gotoStates(Array.from(ids));
   }
 
+  onXStyleChange(): void {
+    this.router.navigate([], { queryParamsHandling: 'merge', queryParams: {xstyle: this.xstyle}});
+  }
+
   // this updates the URL, which triggers onChosenStatesChange
   private gotoStates(selected: string[]) {
-    this.router.navigate([], { queryParams: {id: selected}});
+    this.router.navigate([], { queryParamsHandling: 'merge', queryParams: {id: selected}});
   }
 
   /**
@@ -95,5 +100,6 @@ export class SelectorComponent implements OnInit {
     // ng-select change detection is subtle, see https://github.com/ng-select/ng-select/blob/master/README.md note on
     // Change Detection.
     this.selectedStates = Array.from(postalCodes);
+    this.xstyle = states.xstyle;
   }
 }

@@ -9,15 +9,17 @@ import { ChosenStates, PrefsObserver } from "../prefs-observer/prefs-observer.se
   styleUrls: ['../graphs/graphs.component.css']
 })
 export class InfectionsComponent extends GraphsComponent {
-  layout = Object.assign(this.getBaseLayout(), {
-    yaxis: {
-      title: 'Infections',
-      type: 'log',
-    }
-  });
-
   constructor(prefsObserver: PrefsObserver) {
     super(prefsObserver);
+  }
+
+  createLayout(): any {
+    return Object.assign(this.getBaseLayout(), {
+      yaxis: {
+        title: 'Infections',
+        type: 'log',
+      }
+    });
   }
 
   getDataForState(state: StateStats): number[] {
