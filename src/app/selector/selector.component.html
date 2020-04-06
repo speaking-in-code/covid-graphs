@@ -1,6 +1,6 @@
 <mat-card>
-  <label id="xstyle-label">X-Axis</label>
-  <mat-radio-group (change)="onXStyleChange()" aria-labelledby="xstyle-label" [(ngModel)]="xstyle">
+  <label id="compare-label">Comparison Mode</label>
+  <mat-radio-group class="compare-group "(change)="onXStyleChange()" aria-labelledby="compare-label" [(ngModel)]="xstyle">
     <mat-radio-button value="date">By Date</mat-radio-button>
     <mat-radio-button value="critical">Since Critical Mass</mat-radio-button>
   </mat-radio-group>
@@ -12,6 +12,7 @@
              [items]="available"
              bindLabel="title"
              bindValue="id"
+             dropdownPosition="'bottom'"
              groupBy="states"
              markFirst=false
              multiple=true
@@ -20,8 +21,8 @@
              selectableGroupAsModel=true>
     <ng-template ng-option-tmp let-item="item">
       <span *ngIf="item.bolded; then boldBlock else plainBlock"></span>
-      <ng-template #boldBlock><b>{{item.title}}</b></ng-template>
-      <ng-template #plainBlock>{{item.title}}</ng-template>
+      <ng-template #boldBlock><span class="ng-optgroup">{{item.title}}</span></ng-template>
+      <ng-template #plainBlock><span class="ng-option">{{item.title}}</span></ng-template>
     </ng-template>
   </ng-select>
 </mat-card>

@@ -1,4 +1,4 @@
-import { OnDestroy, OnInit } from "@angular/core";
+import { HostListener, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { StateStats } from "../covidtracker/covidtracker.service";
 import { Arrays } from "./arrays";
@@ -13,6 +13,9 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private chosenStates: ChosenStates;
+  private resizeTimer: number = undefined;
+
+  private static readonly kResizeQuiesceMillis = 50;
 
   /**
    * Reasonable defaults for plotly.
@@ -73,6 +76,20 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
   private onChosenStatesChange(chosenStates: ChosenStates): void {
     this.chosenStates = chosenStates;
     this.redrawPlots();
+  }
+
+  // Plotly sometimes gets confused about graph height, typically during screen rotation events. The graph ends
+  // up very short. We detect resizes and then force a refresh. Screen resize events typically fire several times
+  // in quick succession, so we wait for things to settle down before redrawing.
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (this.resizeTimer) {
+      window.clearTimeout(this.resizeTimer);
+    }
+    this.resizeTimer = window.setTimeout(() => {
+      this.redrawPlots();
+      this.resizeTimer = undefined;
+    }, GraphsComponent.kResizeQuiesceMillis);
   }
 
   private redrawPlots(): void {

@@ -1,9 +1,9 @@
-<mat-toolbar color="primary" class="toolbar mat-elevation-z6" xmlns="http://www.w3.org/1999/html">
+<mat-toolbar color="primary" class="top-bar mat-elevation-z6" xmlns="http://www.w3.org/1999/html">
   <mat-icon (click)="snav.toggle()">menu</mat-icon>
   <h1 class="app-name">US Coronavirus Comparison</h1>
 </mat-toolbar>
-<mat-sidenav-container>
-  <mat-sidenav #snav mode="'over'" fixedInViewport="true" fixedTopGap="56" class="sidenav">
+<mat-sidenav-container class="main-sidenav-container">
+  <mat-sidenav #snav mode="'over'" fixedInViewport="false" fixedTopGap="56" class="sidenav">
     <app-graphs-selector></app-graphs-selector>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -18,9 +18,9 @@
       </a>
     </nav>
     <router-outlet></router-outlet>
+    <mat-toolbar color="primary" class="mat-elevation-z6">
+      Data credit:
+      <a target="_blank" style="color: white; margin-left: 10px" href="https://covidtracking.com/">The Covid Tracking Project</a>
+    </mat-toolbar>
   </mat-sidenav-content>
 </mat-sidenav-container>
-<mat-toolbar color="primary" class="toolbar mat-elevation-z6">
-  Data credit:
-  <a target="_blank" style="color: white; margin-left: 10px" href="https://covidtracking.com/">The Covid Tracking Project</a>
-</mat-toolbar>
