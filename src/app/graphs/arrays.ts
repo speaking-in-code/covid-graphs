@@ -39,6 +39,8 @@ export class Arrays {
   }
 
   /** Geometric mean over array, win is the size of the window to use. */
+  // TODO: more tests for this approximation, in particular what does 'smoothing' mean for something that has
+  // a set of zero data points, followed by actual base for growth...?
   static smoothExponentialRate(a: number[], win: number): number[] {
     return Arrays.smoothWithFunc(a, win, (prevVal, curVal, steps) => {
       if (prevVal === 0) return null;
@@ -54,10 +56,14 @@ export class Arrays {
     let out = [];
     for (let cur = 0; cur < a.length; ++cur) {
       let prev = Math.max(0, cur-win);
-      let curVal = a[cur];
-      let prevVal = a[prev];
-      let smoothed = smoothFn(prevVal, curVal, (cur - prev));
-      out.push(smoothed);
+      if (cur === prev) {
+        out.push(null);
+      } else {
+        let curVal = a[cur];
+        let prevVal = a[prev];
+        let smoothed = smoothFn(prevVal, curVal, (cur - prev));
+        out.push(smoothed);
+      }
     }
     return out;
   }

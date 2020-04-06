@@ -210,7 +210,7 @@ export class StateStats {
   }
 
   private debugLog(str: string) {
-    if (this.metadata.code === 'CA') {
+    if (this.metadata.code === 'disabled') {
       console.log(str);
     }
   }
