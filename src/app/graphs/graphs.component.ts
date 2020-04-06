@@ -123,6 +123,9 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
     let max = 0;
     for (let line of this.data) {
       for (let i = 0; i < line.y.length; ++i) {
+        if (line.y[i] === null || isNaN(line.y[i])) {
+          continue;
+        }
         max = Math.max(max, line.y[i]);
         if (line.y[i] === 0) {
           line.y[i] = null;

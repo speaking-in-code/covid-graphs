@@ -19,6 +19,9 @@ export class DailyInfectionsComponent extends GraphsComponent {
         title: 'Daily Infections (smoothed)',
         rangemode: 'tozero',
         hoverformat: '.0f',
+        type: 'log',
+        dtick: '',
+        autorange: true,
       }
     });
   }
