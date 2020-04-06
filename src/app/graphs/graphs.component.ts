@@ -21,6 +21,8 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
    * Reasonable defaults for plotly.
    *
    * Reference: https://plotly.com/javascript/configuration-options/.
+   *
+   * https://github.com/plotly/plotly.js/blob/master/src/plot_api/plot_config.js#L22-L86
    */
   readonly config = {
     responsive: true,
@@ -39,6 +41,15 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
       // causes layout problems.
       autosize: true,
       height: 450,
+      dragmode: false,
+      showlegend: true,
+      // Docs: https://plotly.com/javascript/reference/#layout-legend-xanchor
+      legend: {
+        x: 0.05,
+        y: 0.95,
+        xanchor: 'left',
+        yanchor: 'top',
+      },
       margin: { t: 20, pad: 0 },
       xaxis: {
         fixedrange: true
