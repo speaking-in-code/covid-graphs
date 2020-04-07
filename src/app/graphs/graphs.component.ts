@@ -16,6 +16,7 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
   private resizeTimer: number = undefined;
 
   private static readonly kResizeQuiesceMillis = 50;
+  private static readonly kRecentDays = 14;
 
   /**
    * Reasonable defaults for plotly.
@@ -111,6 +112,9 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
       if (this.chosenStates.xstyle === 'critical') {
         line.x = stateStats.offsetDays;
         line.y = this.getDataForState(stateStats).slice(stateStats.offsetCount);
+      } else if (this.chosenStates.xstyle === 'recent') {
+        line.x = stateStats.dates.slice(-GraphsComponent.kRecentDays);
+        line.y = this.getDataForState(stateStats).slice(-GraphsComponent.kRecentDays);
       } else {
         line.x = stateStats.dates;
         line.y = this.getDataForState(stateStats);

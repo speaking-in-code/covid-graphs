@@ -6,7 +6,7 @@ import { CovidTrackerService, StateStats } from "../covidtracker/covidtracker.se
 
 export class ChosenStates {
   readonly states: StateStats[];
-  readonly xstyle: string;
+  readonly xstyle: (null|'date'|'critical'|'recent');
 }
 
 @Injectable({
@@ -30,9 +30,16 @@ export class PrefsObserver {
         states.push(stats);
       }
     });
-    let xstyle = params.get('xstyle');
-    if (xstyle === null) {
-      xstyle = 'date';
+    let p = params.get('xstyle');
+    let xstyle;
+    switch (p) {
+      case 'date':
+      case 'critical':
+      case 'recent':
+        xstyle = p;
+        break;
+      default:
+        xstyle = null;
     }
     return {
       states: states,
