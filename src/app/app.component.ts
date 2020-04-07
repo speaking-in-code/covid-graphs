@@ -16,6 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { path: 'infections', label: 'Total Infections'},
     { path: 'daily-infections', label: 'Daily Infections'},
     { path: 'deaths', label: 'Deaths'},
+    { path: 'daily-deaths', label: 'Daily Deaths'},
     { path: 'growth', label: 'Growth Rates' },
     { path: 'infection-rate', label: 'Infections Per Million'},
     { path: 'tests', label: 'Negative Tests'},

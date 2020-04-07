@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { CovidTrackerService } from "./covidtracker/covidtracker.service";
+import { DailyDeathsComponent } from "./daily-deaths/daily-deaths.component";
 import { DailyInfectionsComponent } from "./daily-infections/daily-infections.component";
 import { DeathsComponent } from "./deaths/deaths.component";
 import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
@@ -16,6 +17,7 @@ const appRoutes: Routes = [
   { path: 'infections', component: InfectionsComponent, pathMatch: 'full' },
   { path: 'daily-infections', component: DailyInfectionsComponent, pathMatch: 'full' },
   { path: 'deaths', component: DeathsComponent, pathMatch: 'full' },
+  { path: 'daily-deaths', component: DailyDeathsComponent, pathMatch: 'full' },
   { path: 'growth', component: GrowthRateComponent, pathMatch: 'full' },
   { path: 'infection-rate', component: InfectionRateComponent, pathMatch: 'full' },
   { path: 'tests', component: TestsComponent, pathMatch: 'full' },
