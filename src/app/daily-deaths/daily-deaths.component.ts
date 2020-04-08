@@ -14,16 +14,9 @@ export class DailyDeathsComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Daily Deaths (smoothed)',
-        rangemode: 'tozero',
-        hoverformat: '.0f',
-        type: 'log',
-        dtick: '',
-        autorange: true,
-      }
-    });
+    let l = this.getBaseLogLayout();
+    l.yaxis.title = 'Deaths per Day (smoothed)';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

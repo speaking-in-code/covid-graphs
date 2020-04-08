@@ -14,14 +14,11 @@ export class GrowthRateComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      automargin: true,
-      yaxis: {
-        title: 'Growth Rate (smoothed)',
-        tickformat: '%',
-        rangemode: 'tozero',
-      }
-    });
+    let l = this.getBaseLayout();
+    l.yaxis.title = 'Growth Rate (smoothed)';
+    l.yaxis.tickformat = '%';
+    l.yaxis.rangemode =  'tozero';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

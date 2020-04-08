@@ -14,12 +14,9 @@ export class InfectionsComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Infections',
-        type: 'log',
-      }
-    });
+    let l = this.getBaseLogLayout();
+    l.yaxis.title = 'Infections';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

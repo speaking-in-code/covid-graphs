@@ -14,13 +14,11 @@ export class TestRateComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Negative Test Rate (smoothed)',
-        tickformat: '%',
-        range: [0, 1],
-      }
-    });
+    let l = this.getBaseLayout();
+    l.yaxis.title = 'Negative Test Rate (smoothed)';
+    l.yaxis.tickformat =  '%';
+    l.yaxis.range = [0, 1];
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

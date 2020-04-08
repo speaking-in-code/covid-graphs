@@ -14,16 +14,9 @@ export class InfectionRateComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Infections per Million People',
-        type: 'log',
-        dtick: '',
-        autorange: true,
-        rangemode: 'tozero',
-        hoverformat: '.0f',
-      }
-    });
+    let l = this.getBaseLogLayout();
+    l.yaxis.title = 'Infections per Million People';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

@@ -14,13 +14,11 @@ export class TestsPerPositiveComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Tests Per Positive (smoothed)',
-        rangemode: 'tozero',
-        hoverformat: '.1f',
-      }
-    });
+    let l = this.getBaseLayout();
+    l.yaxis.title = 'Tests Per Positive (smoothed)';
+    l.yaxis.rangemode = 'tozero';
+    l.yaxis.hoverformat = '.1f';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

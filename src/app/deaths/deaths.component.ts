@@ -14,16 +14,9 @@ export class DeathsComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Deaths',
-        type: 'log',
-        dtick: '',
-        autorange: true,
-        rangemode: 'tozero',
-        hoverformat: '.0f',
-      }
-    });
+    let l = this.getBaseLogLayout();
+    l.yaxis.title = 'Deaths';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {

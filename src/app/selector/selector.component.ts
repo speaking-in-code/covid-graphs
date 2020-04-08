@@ -27,7 +27,7 @@ interface Prefill {
 export class SelectorComponent implements OnInit {
   available: Selection[] = [];
   selectedStates: string[] = [];
-  xstyle = 'date';
+  xstyle: string;
 
   private prefills = new Map<string, Prefill>([
     ['largestOutbreaks', { title: 'Largest Outbreaks', states: this.tracker.largestOutbreaks }],
@@ -100,6 +100,6 @@ export class SelectorComponent implements OnInit {
     // ng-select change detection is subtle, see https://github.com/ng-select/ng-select/blob/master/README.md note on
     // Change Detection.
     this.selectedStates = Array.from(postalCodes);
-    this.xstyle = states.xstyle;
+    this.xstyle = states.xstyle ? states.xstyle : 'date';
   }
 }

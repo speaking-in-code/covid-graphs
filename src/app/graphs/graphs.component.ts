@@ -35,7 +35,25 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
     ]
   };
 
-  protected getBaseLayout() {
+  /**
+   * Get default layout for log-scale graphs.
+   */
+  protected getBaseLogLayout(): any {
+    return Object.assign(this.getBaseLayout(), {
+      yaxis: {
+        rangemode: 'tozero',
+        hoverformat: '.0f',
+        type: 'log',
+        dtick: '',
+        autorange: true,
+      }
+    });
+  }
+
+  /**
+   * Get default layout for linear or log-scale graphs.
+   */
+  protected getBaseLayout(): any {
     return {
       // Autosize set to true is a good idea for horizontal, but triggers bugs with vertical sizing. (Graph relayout
       // will alternate between setting svg-container height to a fixed pixel value (which works) and 100% (which

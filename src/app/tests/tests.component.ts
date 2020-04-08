@@ -14,12 +14,10 @@ export class TestsComponent extends GraphsComponent {
   }
 
   createLayout(): any {
-    return Object.assign(this.getBaseLayout(), {
-      yaxis: {
-        title: 'Negative Tests Per Day (Smoothed)',
-        hoverformat: '.0f',
-      }
-    });
+    let l = this.getBaseLayout();
+    l.yaxis.title = 'Negative Tests Per Day (Smoothed)';
+    l.yaxis.hoverformat = '.0f';
+    return l;
   }
 
   getDataForState(state: StateStats): number[] {
