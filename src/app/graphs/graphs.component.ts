@@ -165,13 +165,32 @@ export abstract class GraphsComponent implements OnInit, OnDestroy {
         }
       }
     }
-    let tickvals = [];
+
+    // Figure out how many ticks we need to fit the data range. We use a log series
+    // of ticks: 1, 2, 5, 10, 20, 50, ...
     let multiplier = .1;
-    while (tickvals.length === 0 || Arrays.last(tickvals) <= max) {
+    let numTicks = 0;
+    let maxTick = 0;
+    do {
+      maxTick = 1 * multiplier;
+      ++numTicks;
+      if (maxTick > max) break;
+      maxTick = 2 * multiplier;
+      ++numTicks;
+      if (maxTick > max) break;
+      maxTick = 5 * multiplier;
+      ++numTicks;
+      multiplier *= 10;
+    } while (maxTick <= max);
+
+    // Make one extra tick, so that plotly doesn't cut off the top one.
+    let tickvals = [];
+    multiplier = 0.1;
+    for (let i = 0; i <= numTicks; ++i) {
       tickvals.push(1 * multiplier);
-      if (Arrays.last(tickvals) > max) break;
+      if (i > numTicks) break;
       tickvals.push(2 * multiplier);
-      if (Arrays.last(tickvals) > max) break;
+      if (i > numTicks) break;
       tickvals.push(5 * multiplier);
       multiplier *= 10;
     }
