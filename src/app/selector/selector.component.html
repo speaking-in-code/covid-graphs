@@ -6,6 +6,13 @@
     <mat-radio-button value="recent">Last 14 Days</mat-radio-button>
   </mat-radio-group>
 </mat-card>
+<mat-card>
+  <mat-chip-list>
+    <mat-chip *ngFor="let prefill of prefills" [value]="prefill" (click)="onChipChange(prefill)">
+      {{prefill.title}}
+    </mat-chip>
+  </mat-chip-list>
+</mat-card>
 
 <mat-card>
   <ng-select (change)="onStatesSelectedChange()"

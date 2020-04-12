@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatChipSelectionChange } from "@angular/material/chips";
 import { Router } from "@angular/router";
 import { CovidTrackerService } from "../covidtracker/covidtracker.service";
 import { PrefsObserver, ChosenStates } from "../prefs-observer/prefs-observer.service";
@@ -14,6 +15,7 @@ interface Selection {
   bolded?: boolean;
 }
 
+/** Interface for selection chips */
 interface Prefill {
   title: string;
   states: string[];
@@ -28,14 +30,13 @@ export class SelectorComponent implements OnInit {
   available: Selection[] = [];
   selectedStates: string[] = [];
   xstyle: string;
-
-  private prefills = new Map<string, Prefill>([
-    ['largestOutbreaks', { title: 'Largest Outbreaks', states: this.tracker.largestOutbreaks }],
-    ['largestInfectionRates', { title: 'Highest Infection Rates', states: this.tracker.largestInfectionRates }],
-    ['fastestGrowth', { title: 'Fastest Growth', states: this.tracker.fastestGrowth }],
-    ['mostTesting', { title: 'Most Testing', states: this.tracker.mostTesting }],
-    ['mostDeaths', { title: 'Most Deaths', states: this.tracker.mostDeaths }],
-  ]);
+  prefills: Prefill[] = [
+    { title: 'Largest Outbreaks', states: this.tracker.largestOutbreaks },
+    { title: 'Highest Infection Rates', states: this.tracker.largestInfectionRates },
+    { title: 'Fastest Growth', states: this.tracker.fastestGrowth },
+    { title: 'Most Testing', states: this.tracker.mostTesting },
+    { title: 'Most Deaths', states: this.tracker.mostDeaths },
+  ];
 
   constructor(
     private tracker: CovidTrackerService,
@@ -44,13 +45,6 @@ export class SelectorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.prefills.forEach((value, key) => {
-      this.available.push({
-        id: key,
-        title: value.title,
-        bolded: true
-      });
-    });
     Array.from(this.tracker.states.stateMap.keys()).sort().forEach((postalCode) => {
       let state = this.tracker.getStats(postalCode);
       this.available.push({
@@ -65,19 +59,15 @@ export class SelectorComponent implements OnInit {
    * Called when user updates selection widget.
    */
   onStatesSelectedChange(): void {
-    // Remove duplicates
-    let ids = new Set<string>();
-    this.selectedStates.forEach((id) => {
-      let prefill = this.prefills.get(id);
-      if (prefill) {
-        prefill.states.forEach((postalCode) => {
-          ids.add(postalCode);
-        });
-      } else {
-        ids.add(id);
-      }
-    });
-    this.gotoStates(Array.from(ids));
+    this.gotoStates(this.selectedStates);
+  }
+
+  /**
+   * Called when chip clicked.
+   */
+  onChipChange(prefill: Prefill): void {
+    this.selectedStates = Array.from(prefill.states);
+    this.gotoStates(this.selectedStates);
   }
 
   onXStyleChange(): void {
