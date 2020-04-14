@@ -34,6 +34,7 @@ export class SelectorComponent implements OnInit {
     { title: 'Largest Outbreaks', states: this.tracker.largestOutbreaks },
     { title: 'Highest Infection Rates', states: this.tracker.largestInfectionRates },
     { title: 'Fastest Growth', states: this.tracker.fastestGrowth },
+    { title: 'Slowest Growth', states: this.tracker.slowestGrowth },
     { title: 'Most Testing', states: this.tracker.mostTesting },
     { title: 'Most Deaths', states: this.tracker.mostDeaths },
   ];

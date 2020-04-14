@@ -259,6 +259,9 @@ export class CovidTrackerService {
   /** States with fastest growth rates, top 5. */
   readonly fastestGrowth: string[];
 
+  /** States with slowest growth rates, top 5. */
+  readonly slowestGrowth: string[];
+
   /** States with biggest outbreaks, top 5. */
   readonly largestOutbreaks: string[];
 
@@ -301,9 +304,14 @@ export class CovidTrackerService {
     builders.forEach((b, postal_code) => {
       this.stats.set(postal_code, b.build());
     });
+
     this.fastestGrowth = this.topK('fastest growth',
       (state) => Arrays.last(state.positives) >= 100,
       (state) => state.smoothedGrowthRate);
+    this.slowestGrowth = this.topK('slowest growth',
+      (state) => Arrays.last(state.positives) >= 100,
+      (state) => state.smoothedGrowthRate,
+      true);
     this.largestInfectionRates = this.topK('largest infection rates',
       (state) => true,
       (state) => state.positivesPerMil);
@@ -331,7 +339,8 @@ export class CovidTrackerService {
    */
   private topK(label: string,
                filterFn: (stateStats: StateStats) => boolean,
-               extractFn: (stateStats: StateStats) => number[]): string[] {
+               extractFn: (stateStats: StateStats) => number[],
+               ascending?: boolean): string[] {
     let top = [];
     for (let code of this.stats.keys()) {
       if (filterFn(this.stats.get(code))) {
@@ -343,6 +352,9 @@ export class CovidTrackerService {
       let stateB = this.stats.get(b);
       let valA = Arrays.last(extractFn(stateA));
       let valB = Arrays.last(extractFn(stateB));
+      if (ascending) {
+        return Arrays.compareAscending(valA, valB);
+      }
       return Arrays.compareDescending(valA, valB);
     });
     if (top.length > CovidTrackerService.kSummarySize) {
