@@ -30,7 +30,6 @@ export class StateMetadata {
 export class DailyStats {
   readonly date: Date;
   readonly positive: number;
-  readonly positiveIncrease: number;
   readonly negative: number;
   readonly death: number;
   readonly state_code: string;
@@ -38,7 +37,6 @@ export class DailyStats {
   constructor(obj: any) {
     this.date = DailyStats.parseDate(obj.date);
     this.positive = DailyStats.ensureNumber(obj.positive);
-    this.positiveIncrease = DailyStats.ensureNumber(obj.positiveIncrease);
     this.negative = DailyStats.ensureNumber(obj.negative);
     this.death = DailyStats.ensureNumber(obj.death);
     this.state_code = obj.state;
@@ -162,7 +160,6 @@ export class StateStats {
     for (const day of builder.daily) {
       this.dates.push(day.date);
       this.positives.push(day.positive);
-      // this.positivesPerDay.push(day.positiveIncrease);
       this.negatives.push(day.negative);
       this.deaths.push(day.death);
     }

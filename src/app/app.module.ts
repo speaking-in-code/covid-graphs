@@ -24,9 +24,7 @@ import { GrowthRateComponent } from "./growth-rate/growth-rate.component";
 import { InfectionsComponent } from "./infections/infections.component";
 import { SelectorComponent } from "./selector/selector.component";
 import { InfectionRateComponent } from './infection-rate/infection-rate.component';
-import { TestRateComponent } from './test-rate/test-rate.component';
 import { TestsPerPositiveComponent } from "./tests-per-positive/tests-per-positive.component";
-import { TestsComponent } from './tests/tests.component';
 
 @NgModule({
   imports: [
@@ -57,8 +55,6 @@ import { TestsComponent } from './tests/tests.component';
     InfectionsComponent,
     SelectorComponent,
     InfectionRateComponent,
-    TestRateComponent,
-    TestsComponent,
     TestsPerPositiveComponent
   ],
   providers: [],
