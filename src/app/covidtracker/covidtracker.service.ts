@@ -117,6 +117,9 @@ export class StateStats {
   // Daily growth rate.
   readonly smoothedGrowthRate: number[];
 
+  // Change in growth rate (2nd derivative, who is bending the curve...?)
+  readonly growthRateChange: number[];
+
   // What fraction of tests case back negative on a given day?
   readonly smoothedNegativeRate: number[] = [];
 
@@ -140,6 +143,7 @@ export class StateStats {
     this.smoothedDailyDeaths = this.initDailyDeaths();
     this.positivesPerMil = this.initInfectionRate(builder);
     this.smoothedGrowthRate = this.initGrowthRate(builder);
+    this.growthRateChange = Arrays.smoothLinearRate(this.smoothedGrowthRate, 7).map(x => Math.abs(x));
     this.initNegativeTestInfo();
     for (this.offsetCount = 0; this.offsetCount < this.dates.length; ++this.offsetCount) {
       if (this.positivesPerMil[this.offsetCount] >= 1) {
@@ -271,6 +275,9 @@ export class CovidTrackerService {
   /** States with the most deaths, top 5. */
   readonly mostDeaths: string[];
 
+  /** States with the fastest change in growth rate, top 5. */
+  readonly fastestGrowthChange: string[];
+
   private stats = new Map<string, StateStats>();
   private debugTopK: boolean;
   private static kSummarySize = 5;
@@ -305,6 +312,9 @@ export class CovidTrackerService {
     this.fastestGrowth = this.topK('fastest growth',
       (state) => Arrays.last(state.positives) >= 100,
       (state) => state.smoothedGrowthRate);
+    this.fastestGrowthChange = this.topK('fastest growth change',
+      (state) => true,
+      (state) => state.growthRateChange);
     this.slowestGrowth = this.topK('slowest growth',
       (state) => Arrays.last(state.positives) >= 100,
       (state) => state.smoothedGrowthRate,

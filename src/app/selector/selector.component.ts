@@ -37,6 +37,7 @@ export class SelectorComponent implements OnInit {
     { title: 'Slowest Growth', states: this.tracker.slowestGrowth },
     { title: 'Most Testing', states: this.tracker.mostTesting },
     { title: 'Most Deaths', states: this.tracker.mostDeaths },
+    { title: 'Recent Turnarounds', states: this.tracker.fastestGrowthChange },
   ];
 
   constructor(
