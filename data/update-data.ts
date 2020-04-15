@@ -5,6 +5,7 @@ const fs = require('fs');
 const dataUrl = 'https://covidtracking.com/api/states/daily.json';
 const outputFile = 'src/assets/daily.json';
 const tmpFile = 'src/assets/.daily.json.tmp';
+
 console.log(`Starting download from ${dataUrl}...`);
 https.request(dataUrl, (res) => {
   if (res.statusCode !== 200) {
@@ -18,9 +19,9 @@ https.request(dataUrl, (res) => {
   res.on('end', () => {
     console.log(`Read ${rawData.length} bytes, generating data...`);
     try {
-      input = JSON.parse(rawData);
-      output = [];
-      for (obj of input) {
+      let input = JSON.parse(rawData);
+      let output = [];
+      for (let obj of input) {
         let trimmed = {
           date: obj.date,
           positive: obj.positive,
@@ -30,7 +31,7 @@ https.request(dataUrl, (res) => {
         };
         output.push(trimmed);
       }
-      outStr = JSON.stringify(output, null, 2);
+      let outStr = JSON.stringify(output, null, 2);
       console.log(`Data is ${outStr.length} bytes, writing file...`);
       fs.writeFileSync(tmpFile, outStr);
       fs.renameSync(tmpFile, outputFile);

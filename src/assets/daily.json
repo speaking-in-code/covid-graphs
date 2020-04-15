@@ -1,5 +1,396 @@
 [
   {
+    "date": 20200414,
+    "positive": 285,
+    "negative": 8063,
+    "death": 9,
+    "state": "AK"
+  },
+  {
+    "date": 20200414,
+    "positive": 3876,
+    "negative": 29241,
+    "death": 110,
+    "state": "AL"
+  },
+  {
+    "date": 20200414,
+    "positive": 1480,
+    "negative": 19651,
+    "death": 30,
+    "state": "AR"
+  },
+  {
+    "date": 20200414,
+    "positive": 0,
+    "negative": 3,
+    "state": "AS"
+  },
+  {
+    "date": 20200414,
+    "positive": 3806,
+    "negative": 40290,
+    "death": 131,
+    "state": "AZ"
+  },
+  {
+    "date": 20200414,
+    "positive": 23338,
+    "negative": 178870,
+    "death": 758,
+    "state": "CA"
+  },
+  {
+    "date": 20200414,
+    "positive": 7691,
+    "negative": 31051,
+    "death": 308,
+    "state": "CO"
+  },
+  {
+    "date": 20200414,
+    "positive": 13989,
+    "negative": 31852,
+    "death": 671,
+    "state": "CT"
+  },
+  {
+    "date": 20200414,
+    "positive": 2058,
+    "negative": 9460,
+    "death": 67,
+    "state": "DC"
+  },
+  {
+    "date": 20200414,
+    "positive": 1761,
+    "negative": 10543,
+    "death": 41,
+    "state": "DE"
+  },
+  {
+    "date": 20200414,
+    "positive": 21367,
+    "negative": 181813,
+    "death": 537,
+    "state": "FL"
+  },
+  {
+    "date": 20200414,
+    "positive": 14223,
+    "negative": 47572,
+    "death": 501,
+    "state": "GA"
+  },
+  {
+    "date": 20200414,
+    "positive": 135,
+    "negative": 811,
+    "death": 5,
+    "state": "GU"
+  },
+  {
+    "date": 20200414,
+    "positive": 504,
+    "negative": 18916,
+    "death": 9,
+    "state": "HI"
+  },
+  {
+    "date": 20200414,
+    "positive": 1899,
+    "negative": 16986,
+    "death": 49,
+    "state": "IA"
+  },
+  {
+    "date": 20200414,
+    "positive": 1453,
+    "negative": 13661,
+    "death": 33,
+    "state": "ID"
+  },
+  {
+    "date": 20200414,
+    "positive": 23247,
+    "negative": 87369,
+    "death": 868,
+    "state": "IL"
+  },
+  {
+    "date": 20200414,
+    "positive": 8527,
+    "negative": 37490,
+    "death": 388,
+    "state": "IN"
+  },
+  {
+    "date": 20200414,
+    "positive": 1426,
+    "negative": 12721,
+    "death": 69,
+    "state": "KS"
+  },
+  {
+    "date": 20200414,
+    "positive": 2048,
+    "negative": 24635,
+    "death": 104,
+    "state": "KY"
+  },
+  {
+    "date": 20200414,
+    "positive": 21518,
+    "negative": 96904,
+    "death": 1013,
+    "state": "LA"
+  },
+  {
+    "date": 20200414,
+    "positive": 28163,
+    "negative": 98388,
+    "death": 957,
+    "state": "MA"
+  },
+  {
+    "date": 20200414,
+    "positive": 9472,
+    "negative": 44261,
+    "death": 302,
+    "state": "MD"
+  },
+  {
+    "date": 20200414,
+    "positive": 734,
+    "negative": 11608,
+    "death": 20,
+    "state": "ME"
+  },
+  {
+    "date": 20200414,
+    "positive": 27001,
+    "negative": 59225,
+    "death": 1768,
+    "state": "MI"
+  },
+  {
+    "date": 20200414,
+    "positive": 1695,
+    "negative": 37546,
+    "death": 79,
+    "state": "MN"
+  },
+  {
+    "date": 20200414,
+    "positive": 4686,
+    "negative": 43292,
+    "death": 133,
+    "state": "MO"
+  },
+  {
+    "date": 20200414,
+    "positive": 13,
+    "negative": 27,
+    "death": 2,
+    "state": "MP"
+  },
+  {
+    "date": 20200414,
+    "positive": 3087,
+    "negative": 34791,
+    "death": 111,
+    "state": "MS"
+  },
+  {
+    "date": 20200414,
+    "positive": 399,
+    "negative": 8835,
+    "death": 7,
+    "state": "MT"
+  },
+  {
+    "date": 20200414,
+    "positive": 5024,
+    "negative": 60015,
+    "death": 108,
+    "state": "NC"
+  },
+  {
+    "date": 20200414,
+    "positive": 341,
+    "negative": 10575,
+    "death": 9,
+    "state": "ND"
+  },
+  {
+    "date": 20200414,
+    "positive": 871,
+    "negative": 10486,
+    "death": 18,
+    "state": "NE"
+  },
+  {
+    "date": 20200414,
+    "positive": 1020,
+    "negative": 10590,
+    "death": 23,
+    "state": "NH"
+  },
+  {
+    "date": 20200414,
+    "positive": 68824,
+    "negative": 70950,
+    "death": 2805,
+    "state": "NJ"
+  },
+  {
+    "date": 20200414,
+    "positive": 1345,
+    "negative": 30625,
+    "death": 31,
+    "state": "NM"
+  },
+  {
+    "date": 20200414,
+    "positive": 3088,
+    "negative": 23573,
+    "death": 120,
+    "state": "NV"
+  },
+  {
+    "date": 20200414,
+    "positive": 202208,
+    "negative": 296935,
+    "death": 10834,
+    "state": "NY"
+  },
+  {
+    "date": 20200414,
+    "positive": 7153,
+    "negative": 60721,
+    "death": 324,
+    "state": "OH"
+  },
+  {
+    "date": 20200414,
+    "positive": 2184,
+    "negative": 26085,
+    "death": 108,
+    "state": "OK"
+  },
+  {
+    "date": 20200414,
+    "positive": 1633,
+    "negative": 30730,
+    "death": 55,
+    "state": "OR"
+  },
+  {
+    "date": 20200414,
+    "positive": 25345,
+    "negative": 108286,
+    "death": 584,
+    "state": "PA"
+  },
+  {
+    "date": 20200414,
+    "positive": 923,
+    "negative": 6284,
+    "death": 45,
+    "state": "PR"
+  },
+  {
+    "date": 20200414,
+    "positive": 3251,
+    "negative": 19649,
+    "death": 80,
+    "state": "RI"
+  },
+  {
+    "date": 20200414,
+    "positive": 3553,
+    "negative": 30319,
+    "death": 97,
+    "state": "SC"
+  },
+  {
+    "date": 20200414,
+    "positive": 988,
+    "negative": 8308,
+    "death": 6,
+    "state": "SD"
+  },
+  {
+    "date": 20200414,
+    "positive": 5823,
+    "negative": 73008,
+    "death": 124,
+    "state": "TN"
+  },
+  {
+    "date": 20200414,
+    "positive": 14624,
+    "negative": 131843,
+    "death": 318,
+    "state": "TX"
+  },
+  {
+    "date": 20200414,
+    "positive": 2412,
+    "negative": 44064,
+    "death": 19,
+    "state": "UT"
+  },
+  {
+    "date": 20200414,
+    "positive": 6171,
+    "negative": 36592,
+    "death": 154,
+    "state": "VA"
+  },
+  {
+    "date": 20200414,
+    "positive": 51,
+    "negative": 326,
+    "death": 1,
+    "state": "VI"
+  },
+  {
+    "date": 20200414,
+    "positive": 752,
+    "negative": 9833,
+    "death": 29,
+    "state": "VT"
+  },
+  {
+    "date": 20200414,
+    "positive": 10538,
+    "negative": 83391,
+    "death": 516,
+    "state": "WA"
+  },
+  {
+    "date": 20200414,
+    "positive": 3555,
+    "negative": 37997,
+    "death": 170,
+    "state": "WI"
+  },
+  {
+    "date": 20200414,
+    "positive": 640,
+    "negative": 16398,
+    "death": 9,
+    "state": "WV"
+  },
+  {
+    "date": 20200414,
+    "positive": 275,
+    "negative": 5689,
+    "death": 1,
+    "state": "WY"
+  },
+  {
     "date": 20200413,
     "positive": 277,
     "negative": 7553,
@@ -7963,7 +8354,7 @@
   },
   {
     "date": 20200324,
-    "positive": 1791,
+    "positive": 6441,
     "negative": 5796,
     "death": 24,
     "state": "MI"
@@ -8345,7 +8736,7 @@
   },
   {
     "date": 20200323,
-    "positive": 1328,
+    "positive": 5789,
     "negative": 4697,
     "death": 15,
     "state": "MI"
@@ -8726,7 +9117,7 @@
   },
   {
     "date": 20200322,
-    "positive": 1035,
+    "positive": 5098,
     "negative": 3712,
     "death": 8,
     "state": "MI"
@@ -9102,7 +9493,7 @@
   },
   {
     "date": 20200321,
-    "positive": 787,
+    "positive": 4543,
     "negative": 3696,
     "death": 5,
     "state": "MI"
@@ -9478,7 +9869,7 @@
   },
   {
     "date": 20200320,
-    "positive": 549,
+    "positive": 4027,
     "negative": 2746,
     "death": 3,
     "state": "MI"
@@ -9852,7 +10243,7 @@
   },
   {
     "date": 20200319,
-    "positive": 336,
+    "positive": 3392,
     "negative": 1785,
     "death": 3,
     "state": "MI"
@@ -10218,7 +10609,7 @@
   },
   {
     "date": 20200318,
-    "positive": 80,
+    "positive": 2913,
     "negative": 1215,
     "state": "MI"
   },
@@ -10577,7 +10968,7 @@
   },
   {
     "date": 20200317,
-    "positive": 65,
+    "positive": 2393,
     "negative": 626,
     "state": "MI"
   },
@@ -10930,7 +11321,7 @@
   },
   {
     "date": 20200316,
-    "positive": 53,
+    "positive": 1933,
     "negative": 272,
     "state": "MI"
   },
@@ -11269,7 +11660,7 @@
   },
   {
     "date": 20200315,
-    "positive": 33,
+    "positive": 1480,
     "negative": 205,
     "state": "MI"
   },
@@ -11587,7 +11978,7 @@
   },
   {
     "date": 20200314,
-    "positive": 25,
+    "positive": 1196,
     "negative": 205,
     "state": "MI"
   },
@@ -11898,7 +12289,7 @@
   },
   {
     "date": 20200313,
-    "positive": 16,
+    "positive": 945,
     "negative": 133,
     "state": "MI"
   },
@@ -12204,7 +12595,7 @@
   },
   {
     "date": 20200312,
-    "positive": 2,
+    "positive": 702,
     "negative": 91,
     "state": "MI"
   },
@@ -12508,7 +12899,7 @@
   },
   {
     "date": 20200311,
-    "positive": 2,
+    "positive": 497,
     "negative": 57,
     "state": "MI"
   },
@@ -12808,7 +13199,7 @@
   },
   {
     "date": 20200310,
-    "positive": 0,
+    "positive": 358,
     "negative": 39,
     "state": "MI"
   },
@@ -13103,7 +13494,7 @@
   },
   {
     "date": 20200309,
-    "positive": 0,
+    "positive": 254,
     "negative": 36,
     "state": "MI"
   },
@@ -13397,7 +13788,7 @@
   },
   {
     "date": 20200308,
-    "positive": 0,
+    "positive": 168,
     "negative": 26,
     "state": "MI"
   },
@@ -13689,7 +14080,7 @@
   },
   {
     "date": 20200307,
-    "positive": 0,
+    "positive": 128,
     "negative": 18,
     "state": "MI"
   },
@@ -13948,7 +14339,7 @@
   },
   {
     "date": 20200306,
-    "positive": 0,
+    "positive": 98,
     "negative": 8,
     "state": "MI"
   },
@@ -14122,7 +14513,7 @@
   },
   {
     "date": 20200305,
-    "positive": 0,
+    "positive": 72,
     "negative": 8,
     "state": "MI"
   },
@@ -14249,6 +14640,11 @@
   },
   {
     "date": 20200304,
+    "positive": 52,
+    "state": "MI"
+  },
+  {
+    "date": 20200304,
     "positive": 1,
     "state": "NC"
   },
@@ -14302,6 +14698,11 @@
   },
   {
     "date": 20200303,
+    "positive": 34,
+    "state": "MI"
+  },
+  {
+    "date": 20200303,
     "positive": 2,
     "negative": 6,
     "state": "RI"
@@ -14315,6 +14716,11 @@
   },
   {
     "date": 20200302,
+    "positive": 18,
+    "state": "MI"
+  },
+  {
+    "date": 20200302,
     "positive": 1,
     "state": "RI"
   },
@@ -14324,6 +14730,11 @@
     "negative": null,
     "death": 11,
     "state": "WA"
+  },
+  {
+    "date": 20200301,
+    "positive": 9,
+    "state": "MI"
   },
   {
     "date": 20200301,
