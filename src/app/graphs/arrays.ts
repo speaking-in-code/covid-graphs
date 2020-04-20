@@ -31,6 +31,20 @@ export class Arrays {
     })
   }
 
+  static movingAverage(a: number[], win: number): number[] {
+    let smoothed = [];
+    let currentSum = 0;
+    for (let i = 0; i < a.length; ++i) {
+      let currentWin = Math.min(i+1, win);
+      if (i - win >= 0) {
+        currentSum -= a[i - win];
+      }
+      currentSum += a[i];
+      smoothed.push(currentSum/currentWin);
+    }
+    return smoothed;
+  }
+
   /** Arithmetic mean over array. win is the size of the window to use, with 1 meaning single step. */
   static smoothLinearRate(a: number[], win: number): number[] {
     return Arrays.smoothWithFunc(a, win, (prevVal, curVal, steps) => {

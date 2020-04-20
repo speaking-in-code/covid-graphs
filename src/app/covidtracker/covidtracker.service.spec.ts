@@ -1,10 +1,12 @@
 import { TestBed } from "@angular/core/testing";
+import { ArraysCustomMatchers } from "../graphs/arrays-custom-matchers";
 import { CovidTrackerService } from "./covidtracker.service";
 
 describe('CovidTrackerService', () => {
   let realData: CovidTrackerService;
 
   beforeEach(() => {
+    jasmine.addMatchers(ArraysCustomMatchers.matchers);
     TestBed.configureTestingModule({});
     realData = TestBed.inject(CovidTrackerService);
   });
@@ -61,6 +63,16 @@ describe('CovidTrackerService', () => {
     {state: 'FL', date: 20200301, positive: 1},
     {state: 'FL', date: 20200302, positive: 10},
     {state: 'FL', date: 20200303, positive: 99},
+
+    // Accelerating growth
+    {state: 'SD', date: 20200301, positive: 1},
+    {state: 'SD', date: 20200302, positive: 2},
+    {state: 'SD', date: 20200303, positive: 4},
+
+    // Slowing growth
+    {state: 'PA', date: 20200301, positive: 100},
+    {state: 'PA', date: 20200302, positive: 150},
+    {state: 'PA', date: 20200303, positive: 160},
   ];
 
   it('selects fastest growth rates', () => {
@@ -91,6 +103,20 @@ describe('CovidTrackerService', () => {
     let tracker = new CovidTrackerService({trackerJson: [
       ], debugTopK: false});
     expect(tracker.largestOutbreaks).toEqual([]);
+  });
+
+  it('calculates change in growth', () => {
+    const tracker = new CovidTrackerService({trackerJson: fakeData});
+
+    const ca = tracker.getStats('CA');
+    console.log(`ca growthRateChange: ${JSON.stringify(ca.changeInGrowth)}`);
+    expect(ca.changeInGrowth).toBeArrayCloseTo([100, 0, 0]);
+
+    const fl = tracker.getStats('FL');
+    expect(fl.changeInGrowth).toBeArrayCloseTo([1, 4.5, 29.67]);
+
+    expect(tracker.getStats('SD').changeInGrowth).toBeArrayCloseTo([1, 0.5, 0.67]);
+    expect(tracker.getStats('PA').changeInGrowth).toBeArrayCloseTo([100, 25, 3.33]);
   });
 });
 

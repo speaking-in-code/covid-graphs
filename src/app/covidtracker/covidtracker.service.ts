@@ -120,6 +120,9 @@ export class StateStats {
   // Change in growth rate (2nd derivative, who is bending the curve...?)
   readonly growthRateChange: number[];
 
+  // Cahange in growth from previous day.
+  readonly changeInGrowth: number[];
+
   // What fraction of tests case back negative on a given day?
   readonly smoothedNegativeRate: number[] = [];
 
@@ -140,10 +143,12 @@ export class StateStats {
     this.metadata = builder.metadata;
     this.initDates(builder);
     this.smoothedDailyInfections = this.initDailyInfections();
+    this.changeInGrowth = this.initChangeInGrowth();
     this.smoothedDailyDeaths = this.initDailyDeaths();
     this.positivesPerMil = this.initInfectionRate(builder);
     this.smoothedGrowthRate = this.initGrowthRate(builder);
-    this.growthRateChange = Arrays.smoothLinearRate(this.smoothedGrowthRate, 7).map(x => Math.abs(x));
+    this.growthRateChange = Arrays.smoothLinearRate(this.smoothedGrowthRate, StateStats.kSmoothingDays)
+        .map(x => Math.abs(x));
     this.initNegativeTestInfo();
     for (this.offsetCount = 0; this.offsetCount < this.dates.length; ++this.offsetCount) {
       if (this.positivesPerMil[this.offsetCount] >= 1) {
@@ -200,6 +205,22 @@ export class StateStats {
 
   private initDailyInfections(): number[] {
     return Arrays.smoothLinearRate(this.positives, StateStats.kSmoothingDays);
+  }
+
+  private initChangeInGrowth(): number[] {
+    let changeInGrowth = [];
+    let yesterday = 0;
+    let yesterdayGrowth = 0;
+    for (const positive of this.positives) {
+      let todayGrowth = positive - yesterday;
+      changeInGrowth.push(todayGrowth - yesterdayGrowth);
+      yesterday = positive;
+      yesterdayGrowth = todayGrowth;
+    }
+    this.debugLog(`Change in growth: ${JSON.stringify(changeInGrowth)}`);
+    let x = Arrays.movingAverage(changeInGrowth, StateStats.kSmoothingDays);
+    this.debugLog(`Moving average: ${JSON.stringify(x)}`);
+    return x;
   }
 
   private initDailyDeaths(): number[] {

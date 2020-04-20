@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { ChangeInGrowthComponent } from "./change-in-growth/change-in-growth.component";
 import { CovidTrackerService } from "./covidtracker/covidtracker.service";
 import { DailyDeathsComponent } from "./daily-deaths/daily-deaths.component";
 import { DailyInfectionsComponent } from "./daily-infections/daily-infections.component";
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
   { path: 'growth', component: GrowthRateComponent, pathMatch: 'full' },
   { path: 'infection-rate', component: InfectionRateComponent, pathMatch: 'full' },
   { path: 'tests-per-positive', component: TestsPerPositiveComponent, pathMatch: 'full' },
+  { path: 'change-in-growth', component: ChangeInGrowthComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

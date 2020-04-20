@@ -1,7 +1,12 @@
 
 import { Arrays } from './arrays';
+import { ArraysCustomMatchers } from "./arrays-custom-matchers";
 
 describe('Arrays', () => {
+  beforeEach(() => {
+    jasmine.addMatchers(ArraysCustomMatchers.matchers);
+  });
+
   it(`sorts ascending`, () => {
     let a = [2, 1, 3];
     let out = a.sort(Arrays.compareAscending);
@@ -90,5 +95,23 @@ describe('Arrays', () => {
     let x = [0, 0, 1, 4, 16];
     let rate = Arrays.smoothExponentialRate(x, 1);
     expect(rate).toEqual([null, null, null, 3.0, 3.0]);
+  });
+
+  it('calculates moving average win 1', () => {
+    let x = [0, 0, 0, 0, 0, 0];
+    let avg = Arrays.movingAverage(x, 1);
+    expect(avg).toEqual([0, 0, 0, 0, 0, 0 ]);
+  });
+
+  it('calculates moving average with large window', () => {
+    let x = [0, 0, 0, 0, 0, 0];
+    let avg = Arrays.movingAverage(x, 100);
+    expect(avg).toEqual([0, 0, 0, 0, 0, 0 ]);
+  });
+
+  it('calculates moving average with small window', () => {
+    let x = [0, 0, 0, 1, 1, 1];
+    let avg = Arrays.movingAverage(x, 3);
+    expect(avg).toBeArrayCloseTo([0, 0, 0, 1/3, 2/3, 1]);
   });
 });

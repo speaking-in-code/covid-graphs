@@ -20,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { path: 'growth', label: 'Growth Rates' },
     { path: 'infection-rate', label: 'Infections Per Million'},
     { path: 'tests-per-positive', label: 'Tests Per Positive'},
+    { path: 'change-in-growth', label: 'Change in Growth'},
   ];
   constructor(private prefsObserver: PrefsObserver) {
   }
