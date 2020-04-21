@@ -238,7 +238,7 @@ export class StateStats {
   }
 
   private debugLog(str: string) {
-    if (this.metadata.code === 'disabled') {
+    if (this.metadata.code === 'AL') {
       console.log(str);
     }
   }
