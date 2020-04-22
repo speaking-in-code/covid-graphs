@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'rastasheep/alpine-node-chromium:10-alpine'
+            image 'node:10.20-alpine'
             args '-p 3000:3000'
         }
     }
