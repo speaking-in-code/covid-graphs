@@ -13,7 +13,6 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'sleep 600'
                 sh 'npm run test-headless'
             }
         }
