@@ -1,13 +1,7 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
-const puppeteer = require('puppeteer');
-require('process');
-
 module.exports = function (config) {
-  process.env.CHROME_BIN = puppeteer.executablePath();
-  console.log(`CHROME_BIN is ${process.env.CHROME_BIN}`);
-
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -31,6 +25,10 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
+    // Be careful with using puppeteer here. Puppeteer sometimes gets confused about what binaries it has already
+    // installed vs not installed, causing spurious failures (the browser doesn't run at all, so the tests fail after
+    // a minute.) If we want to test with more browsers, think through how to install them in a way that plays nicely
+    // with Jenkins...
     browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessNoSandbox'],
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
