@@ -5,6 +5,7 @@
 module.exports = function (config) {
   const process = require('process');
   process.env.CHROME_BIN = require('puppeteer').executablePath();
+  console.log(`CHROME_BIN is ${process.env.CHROME_BIN}`);
 
   config.set({
     basePath: '',
@@ -27,7 +28,7 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_DEBUG,
+    logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessNoSandbox'],
     customLaunchers: {

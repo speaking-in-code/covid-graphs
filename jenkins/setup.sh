@@ -44,6 +44,24 @@ function start_jenkins_blueocean {
     jenkinsci/blueocean
 }
 
+function build_ci_container {
+  docker build --tag covid-graphs-test:1.0 .
+}
+
+function interactive_debug {
+  docker container stop debug || echo -n
+  docker container run -it \
+    --name debug \
+    --rm \
+    --detach \
+    -p 3001:3001 \
+    --mount "type=bind,src=${HOME},dst=/home" \
+    covid-graphs-test:1.0
+  # Start a shell in the container
+  docker container exec -it debug /bin/sh
+}
+
 # one_time_setup
-# start_jenkins_docker
+start_jenkins_docker
 start_jenkins_blueocean
+# interactive_debug
