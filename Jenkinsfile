@@ -11,6 +11,11 @@ pipeline {
         sh 'npm install'
       }
     }
+    stage('Data Update') {
+      steps {
+        sh 'npm run update-data'
+      }
+    }
     stage('Test') {
       steps {
         sh 'npm run test:ci'
