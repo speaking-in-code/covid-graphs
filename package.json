@@ -10,8 +10,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-data": "ts-node data/update-data.ts",
-    "prod-build": "ng build --prod --base-href=/ --aot --build-optimizer --prod",
-    "release": "ts-node release.ts"
+    "prod-build": "ng build --prod --base-href=/ --aot --build-optimizer",
+    "fast-build": "ng build --base-href=/",
+    "release": "firebase deploy --only=hosting --project=corona-compare"
   },
   "private": true,
   "dependencies": {
@@ -42,7 +43,6 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
     "firebase-tools": "^8.1.1",
-    "google-auth-library": "^6.0.0",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.3.0",

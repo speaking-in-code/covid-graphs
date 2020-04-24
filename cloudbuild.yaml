@@ -1,3 +1,19 @@
+# We use a customer docker image with Chrome installed for testing.
 steps:
-  - name: gcr.io/$PROJECT_ID/firebase
-    args: ['deploy', '--project=$PROJECT_ID', '--only=hosting']
+  - name: gcr.io/cloud-builders/docker
+    args: ['build', '-f', 'Dockerfile.cloud-build', '-t', 'covid-graphs-builder', '.']
+  - name: covid-graphs-builder
+    entrypoint: npm
+    args: ['install']
+  - name: covid-graphs-builder
+    entrypoint: npm
+    args: ['run', 'update-data']
+  - name: covid-graphs-builder
+    entrypoint: npm
+    args: ['run', 'test:ci']
+  - name: covid-graphs-builder
+    entrypoint: npm
+    args: ['run', 'prod-build']
+  - name: covid-graphs-builder
+    entrypoint: npm
+    args: ['run', 'release']
