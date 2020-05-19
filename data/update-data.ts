@@ -2,7 +2,7 @@
 const https = require('https');
 const fs = require('fs');
 
-const dataUrl = 'https://covidtracking.com/api/states/daily.json';
+const dataUrl = 'https://covidtracking.com/api/v1/states/daily.json';
 const outputFile = 'src/assets/daily.json';
 const tmpFile = 'src/assets/.daily.json.tmp';
 
